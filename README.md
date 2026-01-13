@@ -1,4 +1,4 @@
-# 👋 Olá, Eu Sou **Autonomousia**
+# 👋 Olá, Eu Sou **Autonomous IA**
 
 ## 🚀 Desenvolvedor Full Stack | AI/ML | Automation Specialist
 
