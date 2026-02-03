@@ -2,9 +2,10 @@
 
 ## 📦 O que você vai encontrar aqui?
 
-Este é um **sistema completo de automação para barbearias** desenvolvido com n8n. Inclui:
+Este é um **sistema completo de automação para barbearias** desenvolvido com n8n e **Google Workspace**. Inclui:
 
 ✅ **Workflow funcional em JSON** - Pronto para importar no n8n  
+✅ **Integração Google Workspace** - Sheets, Drive, Calendar e Gmail  
 ✅ **Documentação completa em Português** - Guias detalhados  
 ✅ **Exemplos de código** - JavaScript, Python, cURL  
 ✅ **Diagramas visuais** - Entenda a arquitetura facilmente  
@@ -39,19 +40,25 @@ workflows/barbearia/
 
 ### 2️⃣ Configurar Credenciais
 
-Você precisará configurar 3 integrações:
+Você precisará configurar 4 integrações do Google:
 
-**MongoDB** (Banco de dados)
-- Host: localhost ou MongoDB Atlas
-- Database: barbearia
+**Google Sheets** (Banco de dados)
+- Crie planilha "Barbearia - Agendamentos"
+- Adicione colunas conforme documentação
+- OAuth2 com scope spreadsheets
 
-**SMTP** (Email)
-- Recomendado: Gmail com senha de app
-- Ou: SendGrid, Mailgun
+**Google Calendar** (Agendamento)
+- Crie calendário "Barbearia - Agendamentos"
+- Configure lembretes automáticos
+- OAuth2 com scope calendar
 
-**WhatsApp API** (Mensagens)
-- Opção 1: Twilio (sandbox grátis)
-- Opção 2: 360Dialog
+**Google Drive** (Documentos)
+- Crie pastas para confirmações e relatórios
+- OAuth2 com scope drive
+
+**Gmail** (Email/Comunicação)
+- Configure OAuth2 ou Service Account
+- Scope gmail.send
 
 📖 **Veja o guia completo:** [CONFIGURACAO.md](./CONFIGURACAO.md)
 
@@ -80,19 +87,20 @@ curl -X POST https://seu-n8n.com/webhook/agendamento \
 ## 🎯 Principais Funcionalidades
 
 ### 📅 Agendamento Automático
-Cliente agenda → Sistema salva → Envia confirmação por email + WhatsApp
+Cliente agenda → Salva no Sheets → Cria evento no Calendar → Envia confirmação por Gmail + salva no Drive
 
 ### 🔔 Lembretes Inteligentes
-Todo dia às 9h → Sistema verifica agendamentos de amanhã → Envia lembrete 24h antes
+Todo dia às 9h → Sistema verifica agendamentos de amanhã → Envia lembrete por Gmail
+Google Calendar também envia lembretes automáticos (24h + 30min antes)
 
 ### ❌ Gestão de Cancelamentos
-Cliente cancela → Sistema atualiza status → Notifica via WhatsApp
+Cliente cancela → Atualiza Sheets → Cancela evento no Calendar → Notifica via Gmail
 
 ### ⭐ Coleta de Feedback
-A cada hora → Sistema verifica serviços concluídos → Solicita avaliação
+A cada hora → Sistema verifica serviços concluídos → Solicita avaliação por Gmail
 
 ### 📊 Relatórios Automáticos
-Fim do dia → Sistema agrega dados → Envia relatório para gerência
+Fim do dia → Busca dados no Sheets → Processa stats → Salva no Drive + envia por Gmail
 
 ---
 
@@ -100,12 +108,16 @@ Fim do dia → Sistema agrega dados → Envia relatório para gerência
 
 ```
 ┌─────────────────────────────────────────────────────────┐
+│                    GOOGLE WORKSPACE                      │
+├─────────────────────────────────────────────────────────┤
 │                                                          │
-│   WEBHOOK → MONGODB → EMAIL + WHATSAPP                 │
-│   (Entrada)  (Salvar)  (Notificar)                     │
+│   WEBHOOK → SHEETS → CALENDAR → DRIVE + GMAIL          │
+│   (Entrada)  (Salvar) (Evento)   (Notificar)           │
 │                                                          │
-│   CRON → MONGODB → WHATSAPP                            │
-│   (Diário) (Buscar)  (Lembrete)                        │
+│   CRON → SHEETS → GMAIL                                │
+│   (Diário) (Buscar) (Lembrete)                         │
+│                                                          │
+│   Calendar também envia lembretes automáticos           │
 │                                                          │
 └─────────────────────────────────────────────────────────┘
 ```
@@ -138,8 +150,10 @@ Visualização completa da arquitetura.
 Guia passo a passo de instalação.
 
 - Setup do n8n (Docker + NPM)
-- Configuração MongoDB
-- Integração WhatsApp e Email
+- Configuração Google Sheets
+- Configuração Google Calendar  
+- Configuração Google Drive
+- Integração Gmail
 - Variáveis de ambiente
 - Backup e restore
 - Troubleshooting
@@ -181,12 +195,14 @@ Código pronto para usar.
 
 **Backend & Automação:**
 - n8n (workflow engine)
-- MongoDB (database)
+- Google Workspace (plataforma)
 - Node.js (runtime)
 
-**Comunicação:**
-- WhatsApp Business API (Twilio/360Dialog)
-- SMTP/SendGrid (email)
+**Google Services:**
+- Google Sheets (database)
+- Google Calendar (scheduling)
+- Google Drive (file storage)
+- Gmail (communication)
 
 **Infraestrutura:**
 - Docker (containerização)
@@ -197,12 +213,14 @@ Código pronto para usar.
 
 ## 📈 Métricas do Sistema
 
-### Nós do Workflow: 18
+### Nós do Workflow: 21
 - 🔷 3 Webhooks
 - ⏰ 3 Cron Jobs
-- 💾 6 Operações MongoDB
-- 📧 2 Envios de Email
-- 📲 4 Mensagens WhatsApp
+- 📊 8 Operações Google Sheets
+- 📅 2 Operações Google Calendar
+- 📁 2 Operações Google Drive
+- 📧 5 Envios de Gmail
+- 🔧 1 Code (processamento)
 
 ### Performance:
 - ⚡ Tempo de resposta: < 2s
@@ -233,11 +251,14 @@ const response = await fetch('https://seu-n8n.com/webhook/agendamento', {
 });
 
 // O que acontece automaticamente:
-// 1. ✅ Agendamento salvo no MongoDB
-// 2. 📧 Email de confirmação enviado
-// 3. 📲 WhatsApp de confirmação enviado
-// 4. 🔔 Lembrete será enviado 24h antes
-// 5. ⭐ Feedback solicitado após o serviço
+// 1. ✅ Agendamento salvo no Google Sheets
+// 2. 📅 Evento criado no Google Calendar
+// 3. 🔗 Event ID salvo no Sheets
+// 4. 📁 Confirmação salva no Google Drive
+// 5. 📧 Gmail de confirmação enviado
+// 6. 📅 Cliente recebe convite do Calendar
+// 7. 🔔 Calendar envia lembretes automáticos (24h + 30min)
+// 8. ⭐ Feedback solicitado após o serviço
 ```
 
 ### Cenário 2: Cliente Cancela
@@ -246,15 +267,20 @@ const response = await fetch('https://seu-n8n.com/webhook/agendamento', {
 curl -X POST https://seu-n8n.com/webhook/cancelamento \
   -H "Content-Type: application/json" \
   -d '{
-    "_id": "65f123...",
+    "row_number": "5",
+    "calendar_event_id": "abc123xyz",
     "cliente_nome": "Maria Santos",
-    "cliente_telefone": "+5511987654321",
+    "cliente_email": "maria@email.com",
+    "data_hora": "2026-02-15T15:00:00Z",
+    "servico": "Corte + Barba",
     "motivo": "Imprevisto"
   }'
 
 # O que acontece:
-# 1. ✅ Status atualizado no MongoDB
-# 2. 📲 WhatsApp de cancelamento enviado
+# 1. ✅ Status atualizado no Google Sheets
+# 2. 📅 Evento cancelado no Google Calendar
+# 3. 📧 Gmail de cancelamento enviado
+# 4. 📅 Calendar notifica todos os participantes
 # 3. 📊 Estatística registrada
 ```
 
@@ -264,9 +290,10 @@ curl -X POST https://seu-n8n.com/webhook/cancelamento \
 
 ✅ **Implementado:**
 - HTTPS obrigatório
+- OAuth2 do Google (autenticação segura)
+- Dados armazenados no Google Workspace (criptografia nativa)
 - API keys nos webhooks (opcional)
-- Criptografia de dados
-- Backup automático
+- Controle de permissões granular no Google
 
 📚 **Veja mais em:** [CONFIGURACAO.md - Seção Segurança](./CONFIGURACAO.md#-segurança-e-conformidade)
 
@@ -295,19 +322,22 @@ curl -X POST https://seu-n8n.com/webhook/cancelamento \
 ## ❓ FAQ
 
 **Q: Preciso pagar por algum serviço?**  
-A: n8n self-hosted é grátis. MongoDB Atlas tem tier gratuito. WhatsApp API (Twilio) tem sandbox grátis para testes.
+A: n8n self-hosted é grátis. Google Workspace tem tier gratuito para uso pessoal. Gmail, Sheets, Drive e Calendar são gratuitos com conta Google.
 
 **Q: Funciona para vários barbeiros?**  
-A: Sim! O workflow já suporta múltiplos barbeiros por padrão.
+A: Sim! O workflow já suporta múltiplos barbeiros. Você pode criar calendários separados ou usar cores diferentes no mesmo calendário.
 
 **Q: Posso usar sem saber programar?**  
-A: Sim! Basta importar o workflow e configurar as credenciais. Não precisa escrever código.
+A: Sim! Basta importar o workflow e configurar as credenciais do Google. Não precisa escrever código.
 
-**Q: Como faço backup?**  
-A: Veja o script automático em [CONFIGURACAO.md](./CONFIGURACAO.md#-backup-e-restore)
+**Q: Como funcionam os backups?**  
+A: Os dados ficam no Google Sheets/Drive, que já tem backup automático do Google. Você também pode exportar dados periodicamente.
 
 **Q: Funciona em produção?**  
-A: Sim! Está pronto para produção. Recomendamos usar SSL e autenticação nos webhooks.
+A: Sim! Está pronto para produção. Google Workspace é escalável e confiável. Recomendamos usar SSL e autenticação nos webhooks.
+
+**Q: Preciso de Google Workspace pago?**  
+A: Não! Funciona perfeitamente com conta Google gratuita (Gmail). Google Workspace pago oferece recursos extras mas não é necessário.
 
 ---
 
