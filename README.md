@@ -110,12 +110,141 @@ Explore meus projetos diretamente no VS Code!
 [![Open in VS Code](https://img.shields.io/badge/Open%20in-VS%20Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)](https://vscode.dev/github/autonomousia25-hue/autonomousia25-hue)
 [![Open in GitHub Dev](https://img.shields.io/badge/Open%20in-GitHub.dev-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.dev/autonomousia25-hue/autonomousia25-hue)
 
-### 🚀 Acesso Rápido aos Projetos
+### 🚀 Acesso Rápido aos Projetos (Web)
 
 | Projeto | VS Code Web | GitHub Dev |
 |---------|-------------|------------|
 | **n8n MCP Server** | [![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/github/autonomousia25-hue/n8n-mcp-server) | [![GitHub](https://img.shields.io/badge/GitHub.dev-181717?style=flat-square&logo=github&logoColor=white)](https://github.dev/autonomousia25-hue/n8n-mcp-server) |
 | **Autonomousia25-hue** | [![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/github/autonomousia25-hue/autonomousia25-hue) | [![GitHub](https://img.shields.io/badge/GitHub.dev-181717?style=flat-square&logo=github&logoColor=white)](https://github.dev/autonomousia25-hue/autonomousia25-hue) |
+
+### 🖥️ Configuração do VS Code Local
+
+#### 📋 Pré-requisitos
+
+1. **Instalar o VS Code**: [Download VS Code](https://code.visualstudio.com/download)
+2. **Instalar o Git**: [Download Git](https://git-scm.com/downloads)
+3. **Configurar SSH** (opcional, mas recomendado):
+   ```bash
+   # Gerar chave SSH
+   ssh-keygen -t ed25519 -C "seu-email@example.com"
+   
+   # Adicionar a chave ao ssh-agent
+   eval "$(ssh-agent -s)"
+   ssh-add ~/.ssh/id_ed25519
+   
+   # Copiar a chave pública e adicionar ao GitHub
+   cat ~/.ssh/id_ed25519.pub
+   ```
+
+#### 📦 Clonar Repositórios Localmente
+
+```bash
+# Clone via HTTPS
+git clone https://github.com/autonomousia25-hue/n8n-mcp-server.git
+cd n8n-mcp-server
+code .
+
+# Clone via SSH (recomendado)
+git clone git@github.com:autonomousia25-hue/n8n-mcp-server.git
+cd n8n-mcp-server
+code .
+```
+
+#### 🔌 Extensões Recomendadas do VS Code
+
+**Essenciais para Desenvolvimento:**
+- **ESLint** - Linting para JavaScript/TypeScript
+- **Prettier** - Formatação de código
+- **GitLens** - Supercharge Git capabilities
+- **GitHub Copilot** - AI pair programmer
+- **Error Lens** - Highlight errors inline
+
+**Para TypeScript/JavaScript:**
+- **TypeScript Vue Plugin (Volar)** - Vue 3 support
+- **JavaScript (ES6) code snippets**
+- **npm Intellisense**
+- **Path Intellisense**
+
+**Para Python:**
+- **Python** - Microsoft Python extension
+- **Pylance** - Fast Python language server
+- **Python Debugger**
+
+**DevOps & Docker:**
+- **Docker** - Manage containers
+- **Remote - SSH** - Edit files on remote servers
+- **Remote - Containers** - Develop inside containers
+
+**Produtividade:**
+- **Todo Tree** - Track TODO/FIXME
+- **Better Comments** - Improve code comments
+- **Bracket Pair Colorizer 2**
+- **Material Icon Theme** - File icons
+
+#### ⚙️ Configurações Recomendadas
+
+Adicione ao seu `settings.json` (Cmd/Ctrl + Shift + P → "Open Settings JSON"):
+
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "files.autoSave": "onFocusChange",
+  "workbench.iconTheme": "material-icon-theme",
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "editor.suggestSelection": "first",
+  "editor.tabSize": 2,
+  "editor.bracketPairColorization.enabled": true
+}
+```
+
+#### 🌐 Desenvolvimento Remoto
+
+**Opção 1: Remote - SSH**
+```bash
+# Conectar a servidor remoto
+# Cmd/Ctrl + Shift + P → "Remote-SSH: Connect to Host"
+# Digite: user@hostname
+```
+
+**Opção 2: Dev Containers**
+```bash
+# Abrir projeto em container
+# Cmd/Ctrl + Shift + P → "Dev Containers: Reopen in Container"
+```
+
+**Opção 3: GitHub Codespaces**
+- Acesse o repositório no GitHub
+- Clique em "Code" → "Codespaces" → "Create codespace on main"
+
+#### 🚀 Atalhos Úteis do VS Code
+
+| Atalho | Ação |
+|--------|------|
+| `Ctrl/Cmd + P` | Quick Open (buscar arquivos) |
+| `Ctrl/Cmd + Shift + P` | Command Palette |
+| `Ctrl/Cmd + B` | Toggle Sidebar |
+| `Ctrl/Cmd + J` | Toggle Terminal |
+| `Ctrl/Cmd + Shift + F` | Search in files |
+| `Ctrl/Cmd + D` | Select next occurrence |
+| `Alt + ↑/↓` | Move line up/down |
+| `Ctrl/Cmd + /` | Toggle comment |
+| `F12` | Go to Definition |
+| `Shift + F12` | Show References |
+
+#### 📚 Recursos Adicionais
+
+- 📖 [VS Code Documentation](https://code.visualstudio.com/docs)
+- 🎓 [VS Code Tips & Tricks](https://code.visualstudio.com/docs/getstarted/tips-and-tricks)
+- 🔧 [VS Code Keyboard Shortcuts](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf)
+- 💡 [VS Code Extension Marketplace](https://marketplace.visualstudio.com/vscode)
 
 ---
 
