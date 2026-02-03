@@ -241,7 +241,7 @@ Adicione ao seu `settings.json` (Cmd/Ctrl + Shift + P → "Open Settings JSON"):
 
 - 📖 [VS Code Documentation](https://code.visualstudio.com/docs)
 - 🎓 [VS Code Tips & Tricks](https://code.visualstudio.com/docs/getstarted/tips-and-tricks)
-- 🔧 [VS Code Keyboard Shortcuts](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf)
+- 🔧 [VS Code Keyboard Shortcuts](https://code.visualstudio.com/docs/getstarted/keybindings)
 - 💡 [VS Code Extension Marketplace](https://marketplace.visualstudio.com/vscode)
 
 ---
