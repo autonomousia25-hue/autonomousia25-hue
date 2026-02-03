@@ -63,7 +63,11 @@ extensions=(
 
 for ext in "${extensions[@]}"; do
     echo "  → Instalando $ext..."
-    code --install-extension "$ext" --force 2>/dev/null || echo -e "${YELLOW}  ⚠️  Não foi possível instalar $ext${NC}"
+    if code --install-extension "$ext" --force; then
+        echo -e "${GREEN}    ✓ Instalado${NC}"
+    else
+        echo -e "${YELLOW}  ⚠️  Não foi possível instalar $ext${NC}"
+    fi
 done
 echo ""
 

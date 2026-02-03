@@ -25,10 +25,10 @@ Write-Host ""
 
 # Instalar GitHub Copilot
 Write-Host "📦 Instalando GitHub Copilot..." -ForegroundColor Yellow
-try {
-    code --install-extension GitHub.copilot --force
+code --install-extension GitHub.copilot --force
+if ($LASTEXITCODE -eq 0) {
     Write-Host "✅ GitHub Copilot instalado com sucesso!" -ForegroundColor Green
-} catch {
+} else {
     Write-Host "❌ Erro ao instalar GitHub Copilot" -ForegroundColor Red
     exit 1
 }
@@ -36,10 +36,10 @@ Write-Host ""
 
 # Instalar GitHub Copilot Chat
 Write-Host "📦 Instalando GitHub Copilot Chat..." -ForegroundColor Yellow
-try {
-    code --install-extension GitHub.copilot-chat --force
+code --install-extension GitHub.copilot-chat --force
+if ($LASTEXITCODE -eq 0) {
     Write-Host "✅ GitHub Copilot Chat instalado com sucesso!" -ForegroundColor Green
-} catch {
+} else {
     Write-Host "⚠️  GitHub Copilot Chat pode não estar disponível" -ForegroundColor Yellow
 }
 Write-Host ""
@@ -81,7 +81,7 @@ Write-Host "⏳ Abrindo VS Code em 3 segundos..." -ForegroundColor Yellow
 Start-Sleep -Seconds 3
 
 # Abrir VS Code no diretório atual
-Start-Process code -ArgumentList "."
+& code .
 
 Write-Host ""
 Write-Host "✨ Configuração concluída!" -ForegroundColor Green
