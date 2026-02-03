@@ -1,5 +1,5 @@
 {
-  "name": "Barbearia - Sistema Completo de Agendamento",
+  "name": "Barbearia - Sistema Completo de Agendamento (Google Sheets)",
   "nodes": [
     {
       "parameters": {
@@ -16,58 +16,92 @@
     },
     {
       "parameters": {
-        "operation": "create",
-        "collection": "agendamentos",
-        "fields": "={\n  \"cliente_nome\": \"{{ $json.nome }}\",\n  \"cliente_telefone\": \"{{ $json.telefone }}\",\n  \"cliente_email\": \"{{ $json.email }}\",\n  \"servico\": \"{{ $json.servico }}\",\n  \"barbeiro\": \"{{ $json.barbeiro }}\",\n  \"data_hora\": \"{{ $json.data_hora }}\",\n  \"status\": \"confirmado\",\n  \"valor\": \"{{ $json.valor }}\",\n  \"observacoes\": \"{{ $json.observacoes }}\",\n  \"criado_em\": \"{{ $now }}\"\n}"
-      },
-      "id": "mongodb-salvar",
-      "name": "MongoDB - Salvar Agendamento",
-      "type": "n8n-nodes-base.mongodb",
-      "typeVersion": 1,
-      "position": [450, 300],
-      "credentials": {
-        "mongoDb": {
-          "id": "1",
-          "name": "MongoDB Barbearia"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "to": "={{ $json.cliente_email }}",
-        "subject": "Agendamento Confirmado - Barbearia Premium",
-        "text": "=Olá {{ $json.cliente_nome }},\n\nSeu agendamento foi confirmado com sucesso!\n\n📅 Data e Hora: {{ $json.data_hora }}\n✂️ Serviço: {{ $json.servico }}\n💈 Barbeiro: {{ $json.barbeiro }}\n💰 Valor: R$ {{ $json.valor }}\n\nObservações: {{ $json.observacoes }}\n\nEstamos te esperando!\n\nBarbearia Premium\n📞 (11) 99999-9999\n📍 Rua da Barbearia, 123",
-        "options": {
-          "appendAttribution": false
-        }
-      },
-      "id": "email-confirmacao",
-      "name": "Email - Confirmação",
-      "type": "n8n-nodes-base.emailSend",
-      "typeVersion": 2,
-      "position": [650, 200],
-      "credentials": {
-        "smtp": {
-          "id": "2",
-          "name": "SMTP Barbearia"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "phoneNumber": "={{ $json.cliente_telefone }}",
-        "message": "=🔔 *Agendamento Confirmado!*\n\nOlá *{{ $json.cliente_nome }}*!\n\n📅 Data: {{ $json.data_hora }}\n✂️ Serviço: {{ $json.servico }}\n💈 Barbeiro: {{ $json.barbeiro }}\n💰 Valor: R$ {{ $json.valor }}\n\nNos vemos em breve! 👋\n\n_Barbearia Premium_",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Agendamentos",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "criado_em": "={{ $now.toISO() }}",
+            "cliente_nome": "={{ $json.nome }}",
+            "cliente_telefone": "={{ $json.telefone }}",
+            "cliente_email": "={{ $json.email }}",
+            "servico": "={{ $json.servico }}",
+            "barbeiro": "={{ $json.barbeiro }}",
+            "data_hora": "={{ $json.data_hora }}",
+            "status": "confirmado",
+            "valor": "={{ $json.valor }}",
+            "observacoes": "={{ $json.observacoes }}",
+            "feedback_enviado": "false"
+          }
+        },
         "options": {}
       },
-      "id": "whatsapp-confirmacao",
-      "name": "WhatsApp - Confirmação",
-      "type": "n8n-nodes-base.whatsapp",
+      "id": "sheets-salvar",
+      "name": "Google Sheets - Salvar Agendamento",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [450, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "1",
+          "name": "Google Sheets - Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "folderId": {
+          "__rl": true,
+          "value": "CONFIRMACOES_FOLDER_ID",
+          "mode": "id"
+        },
+        "name": "=Confirmacao_{{ $json.nome }}_{{ $now.toFormat('yyyy-MM-dd_HH-mm') }}.txt",
+        "fileContent": "=AGENDAMENTO CONFIRMADO\n\nCliente: {{ $json.nome }}\nTelefone: {{ $json.telefone }}\nEmail: {{ $json.email }}\nServiço: {{ $json.servico }}\nBarbeiro: {{ $json.barbeiro }}\nData/Hora: {{ $json.data_hora }}\nValor: R$ {{ $json.valor }}\nObservações: {{ $json.observacoes }}\n\nConfirmado em: {{ $now.toISO() }}",
+        "mimeType": "text/plain",
+        "options": {}
+      },
+      "id": "drive-confirmacao",
+      "name": "Google Drive - Salvar Confirmação",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [650, 200],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "2",
+          "name": "Google Drive - Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "service": "gmail",
+        "resource": "message",
+        "operation": "send",
+        "to": "={{ $json.email }}",
+        "subject": "Agendamento Confirmado - Barbearia Premium",
+        "message": "=Olá {{ $json.nome }},\n\nSeu agendamento foi confirmado com sucesso!\n\n📅 Data e Hora: {{ $json.data_hora }}\n✂️ Serviço: {{ $json.servico }}\n💈 Barbeiro: {{ $json.barbeiro }}\n💰 Valor: R$ {{ $json.valor }}\n\nObservações: {{ $json.observacoes }}\n\nEstamos te esperando!\n\nBarbearia Premium\n📞 (11) 99999-9999\n📍 Rua da Barbearia, 123",
+        "options": {}
+      },
+      "id": "gmail-confirmacao",
+      "name": "Gmail - Confirmação",
+      "type": "n8n-nodes-base.google",
       "typeVersion": 1,
       "position": [650, 400],
       "credentials": {
-        "whatsappApi": {
+        "googleApi": {
           "id": "3",
-          "name": "WhatsApp Business API"
+          "name": "Google API - Barbearia"
         }
       }
     },
@@ -90,37 +124,79 @@
     },
     {
       "parameters": {
-        "operation": "find",
-        "collection": "agendamentos",
-        "query": "={\n  \"data_hora\": {\n    \"$gte\": \"{{ $now.plus(1, 'day').startOf('day') }}\",\n    \"$lte\": \"{{ $now.plus(1, 'day').endOf('day') }}\"\n  },\n  \"status\": \"confirmado\"\n}"
+        "operation": "getAll",
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Agendamentos",
+          "mode": "name"
+        },
+        "returnAll": false,
+        "limit": 100,
+        "filters": {
+          "fields": [
+            {
+              "fieldName": "status",
+              "fieldValue": "confirmado"
+            }
+          ]
+        },
+        "options": {}
       },
-      "id": "mongodb-buscar-amanha",
-      "name": "MongoDB - Buscar Agendamentos Amanhã",
-      "type": "n8n-nodes-base.mongodb",
-      "typeVersion": 1,
+      "id": "sheets-buscar-amanha",
+      "name": "Google Sheets - Buscar Agendamentos",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
       "position": [450, 700],
       "credentials": {
-        "mongoDb": {
+        "googleSheetsOAuth2Api": {
           "id": "1",
-          "name": "MongoDB Barbearia"
+          "name": "Google Sheets - Barbearia"
         }
       }
     },
     {
       "parameters": {
-        "phoneNumber": "={{ $json.cliente_telefone }}",
-        "message": "=🔔 *Lembrete de Agendamento*\n\nOlá *{{ $json.cliente_nome }}*!\n\nLembramos que você tem um horário marcado *amanhã*:\n\n⏰ Horário: {{ $json.data_hora }}\n✂️ Serviço: {{ $json.servico }}\n💈 Barbeiro: {{ $json.barbeiro }}\n\nCaso precise cancelar ou remarcar, entre em contato conosco.\n\nAté amanhã! 🙌\n\n_Barbearia Premium_\n📞 (11) 99999-9999",
+        "conditions": {
+          "dateTime": [
+            {
+              "value1": "={{ $json.data_hora }}",
+              "value2": "={{ $now.plus(1, 'day').toISO() }}",
+              "operation": "equals"
+            }
+          ]
+        }
+      },
+      "id": "filtro-amanha",
+      "name": "Filtrar - Amanhã",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [650, 700]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "service": "gmail",
+        "resource": "message",
+        "operation": "send",
+        "to": "={{ $json.cliente_email }}",
+        "subject": "Lembrete - Agendamento Amanhã",
+        "message": "=🔔 *Lembrete de Agendamento*\n\nOlá {{ $json.cliente_nome }}!\n\nLembramos que você tem um horário marcado *amanhã*:\n\n⏰ Horário: {{ $json.data_hora }}\n✂️ Serviço: {{ $json.servico }}\n💈 Barbeiro: {{ $json.barbeiro }}\n\nCaso precise cancelar ou remarcar, entre em contato conosco.\n\nAté amanhã! 🙌\n\nBarbearia Premium\n📞 (11) 99999-9999",
         "options": {}
       },
-      "id": "whatsapp-lembrete",
-      "name": "WhatsApp - Lembrete 24h",
-      "type": "n8n-nodes-base.whatsapp",
+      "id": "gmail-lembrete",
+      "name": "Gmail - Lembrete 24h",
+      "type": "n8n-nodes-base.google",
       "typeVersion": 1,
-      "position": [650, 700],
+      "position": [850, 700],
       "credentials": {
-        "whatsappApi": {
+        "googleApi": {
           "id": "3",
-          "name": "WhatsApp Business API"
+          "name": "Google API - Barbearia"
         }
       }
     },
@@ -140,37 +216,61 @@
     {
       "parameters": {
         "operation": "update",
-        "collection": "agendamentos",
-        "updateKey": "_id",
-        "fields": "={\n  \"status\": \"cancelado\",\n  \"cancelado_em\": \"{{ $now }}\",\n  \"motivo_cancelamento\": \"{{ $json.motivo }}\"\n}"
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Agendamentos",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "cancelado",
+            "cancelado_em": "={{ $now.toISO() }}",
+            "motivo_cancelamento": "={{ $json.motivo }}"
+          }
+        },
+        "options": {
+          "dataLocationOnSheet": "headerRow",
+          "keyRow": "={{ $json.row_number }}"
+        }
       },
-      "id": "mongodb-cancelar",
-      "name": "MongoDB - Cancelar Agendamento",
-      "type": "n8n-nodes-base.mongodb",
-      "typeVersion": 1,
+      "id": "sheets-cancelar",
+      "name": "Google Sheets - Cancelar Agendamento",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
       "position": [450, 1000],
       "credentials": {
-        "mongoDb": {
+        "googleSheetsOAuth2Api": {
           "id": "1",
-          "name": "MongoDB Barbearia"
+          "name": "Google Sheets - Barbearia"
         }
       }
     },
     {
       "parameters": {
-        "phoneNumber": "={{ $json.cliente_telefone }}",
-        "message": "=❌ *Agendamento Cancelado*\n\nOlá *{{ $json.cliente_nome }}*,\n\nSeu agendamento foi cancelado:\n\n📅 Data/Hora: {{ $json.data_hora }}\n✂️ Serviço: {{ $json.servico }}\n\nMotivo: {{ $json.motivo_cancelamento }}\n\nPara novo agendamento, entre em contato conosco!\n\n_Barbearia Premium_\n📞 (11) 99999-9999",
+        "authentication": "serviceAccount",
+        "service": "gmail",
+        "resource": "message",
+        "operation": "send",
+        "to": "={{ $json.cliente_email }}",
+        "subject": "Agendamento Cancelado",
+        "message": "=❌ *Agendamento Cancelado*\n\nOlá {{ $json.cliente_nome }},\n\nSeu agendamento foi cancelado:\n\n📅 Data/Hora: {{ $json.data_hora }}\n✂️ Serviço: {{ $json.servico }}\n\nMotivo: {{ $json.motivo }}\n\nPara novo agendamento, entre em contato conosco!\n\nBarbearia Premium\n📞 (11) 99999-9999",
         "options": {}
       },
-      "id": "whatsapp-cancelamento",
-      "name": "WhatsApp - Notificação Cancelamento",
-      "type": "n8n-nodes-base.whatsapp",
+      "id": "gmail-cancelamento",
+      "name": "Gmail - Notificação Cancelamento",
+      "type": "n8n-nodes-base.google",
       "typeVersion": 1,
       "position": [650, 1000],
       "credentials": {
-        "whatsappApi": {
+        "googleApi": {
           "id": "3",
-          "name": "WhatsApp Business API"
+          "name": "Google API - Barbearia"
         }
       }
     },
@@ -193,56 +293,102 @@
     },
     {
       "parameters": {
-        "operation": "find",
-        "collection": "agendamentos",
-        "query": "={\n  \"data_hora\": {\n    \"$gte\": \"{{ $now.minus(2, 'hours') }}\",\n    \"$lte\": \"{{ $now }}\"\n  },\n  \"status\": \"confirmado\",\n  \"feedback_enviado\": { \"$ne\": true }\n}"
+        "operation": "getAll",
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Agendamentos",
+          "mode": "name"
+        },
+        "returnAll": false,
+        "limit": 50,
+        "filters": {
+          "fields": [
+            {
+              "fieldName": "status",
+              "fieldValue": "confirmado"
+            },
+            {
+              "fieldName": "feedback_enviado",
+              "fieldValue": "false"
+            }
+          ]
+        },
+        "options": {}
       },
-      "id": "mongodb-buscar-concluidos",
-      "name": "MongoDB - Buscar Serviços Concluídos",
-      "type": "n8n-nodes-base.mongodb",
-      "typeVersion": 1,
+      "id": "sheets-buscar-concluidos",
+      "name": "Google Sheets - Buscar Serviços Concluídos",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
       "position": [450, 1300],
       "credentials": {
-        "mongoDb": {
+        "googleSheetsOAuth2Api": {
           "id": "1",
-          "name": "MongoDB Barbearia"
+          "name": "Google Sheets - Barbearia"
         }
       }
     },
     {
       "parameters": {
-        "phoneNumber": "={{ $json.cliente_telefone }}",
-        "message": "=⭐ *Como foi sua experiência?*\n\nOlá *{{ $json.cliente_nome }}*!\n\nEsperamos que tenha gostado do seu corte com o barbeiro *{{ $json.barbeiro }}*!\n\nNos ajude avaliando nosso serviço:\n\n👍 Excelente\n😊 Bom\n😐 Regular\n👎 Ruim\n\nSua opinião é muito importante!\n\n_Barbearia Premium_",
+        "authentication": "serviceAccount",
+        "service": "gmail",
+        "resource": "message",
+        "operation": "send",
+        "to": "={{ $json.cliente_email }}",
+        "subject": "Como foi sua experiência?",
+        "message": "=⭐ *Como foi sua experiência?*\n\nOlá {{ $json.cliente_nome }}!\n\nEsperamos que tenha gostado do seu corte com o barbeiro {{ $json.barbeiro }}!\n\nNos ajude avaliando nosso serviço clicando no link abaixo:\n\n[Link para formulário de feedback]\n\nSua opinião é muito importante!\n\nBarbearia Premium",
         "options": {}
       },
-      "id": "whatsapp-feedback",
-      "name": "WhatsApp - Solicitar Feedback",
-      "type": "n8n-nodes-base.whatsapp",
+      "id": "gmail-feedback",
+      "name": "Gmail - Solicitar Feedback",
+      "type": "n8n-nodes-base.google",
       "typeVersion": 1,
       "position": [650, 1300],
       "credentials": {
-        "whatsappApi": {
+        "googleApi": {
           "id": "3",
-          "name": "WhatsApp Business API"
+          "name": "Google API - Barbearia"
         }
       }
     },
     {
       "parameters": {
         "operation": "update",
-        "collection": "agendamentos",
-        "updateKey": "_id",
-        "fields": "={\n  \"feedback_enviado\": true,\n  \"feedback_enviado_em\": \"{{ $now }}\"\n}"
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Agendamentos",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "feedback_enviado": "true",
+            "feedback_enviado_em": "={{ $now.toISO() }}"
+          }
+        },
+        "options": {
+          "dataLocationOnSheet": "headerRow",
+          "keyRow": "={{ $json.row_number }}"
+        }
       },
-      "id": "mongodb-marcar-feedback",
-      "name": "MongoDB - Marcar Feedback Enviado",
-      "type": "n8n-nodes-base.mongodb",
-      "typeVersion": 1,
+      "id": "sheets-marcar-feedback",
+      "name": "Google Sheets - Marcar Feedback Enviado",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
       "position": [850, 1300],
       "credentials": {
-        "mongoDb": {
+        "googleSheetsOAuth2Api": {
           "id": "1",
-          "name": "MongoDB Barbearia"
+          "name": "Google Sheets - Barbearia"
         }
       }
     },
@@ -261,40 +407,87 @@
     },
     {
       "parameters": {
-        "operation": "aggregate",
-        "collection": "agendamentos",
-        "query": "=[\n  {\n    \"$match\": {\n      \"data_hora\": {\n        \"$gte\": \"{{ $now.startOf('day') }}\",\n        \"$lte\": \"{{ $now.endOf('day') }}\"\n      }\n    }\n  },\n  {\n    \"$group\": {\n      \"_id\": \"$status\",\n      \"total\": { \"$sum\": 1 },\n      \"valor_total\": { \"$sum\": \"$valor\" }\n    }\n  }\n]"
+        "operation": "getAll",
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Agendamentos",
+          "mode": "name"
+        },
+        "returnAll": true,
+        "options": {}
       },
-      "id": "mongodb-relatorio",
-      "name": "MongoDB - Gerar Relatório",
-      "type": "n8n-nodes-base.mongodb",
-      "typeVersion": 1,
+      "id": "sheets-relatorio",
+      "name": "Google Sheets - Buscar Todos Agendamentos",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
       "position": [450, 1600],
       "credentials": {
-        "mongoDb": {
+        "googleSheetsOAuth2Api": {
           "id": "1",
-          "name": "MongoDB Barbearia"
+          "name": "Google Sheets - Barbearia"
         }
       }
     },
     {
       "parameters": {
-        "to": "gerencia@barbearia.com",
-        "subject": "Relatório Diário - Barbearia Premium",
-        "text": "=📊 *Relatório do Dia {{ $now.format('DD/MM/YYYY') }}*\n\n{{ $json.map(item => `\nStatus: ${item._id}\nTotal de Agendamentos: ${item.total}\nValor Total: R$ ${item.valor_total}`).join('\\n\\n') }}\n\n_Relatório automático gerado pelo sistema_",
-        "options": {
-          "appendAttribution": false
-        }
+        "jsCode": "// Processar dados e gerar estatísticas\nconst hoje = new Date();\nhoje.setHours(0, 0, 0, 0);\n\nconst agendamentos = $input.all();\nconst stats = {\n  confirmados: 0,\n  cancelados: 0,\n  valor_confirmados: 0,\n  valor_cancelados: 0\n};\n\nagendamentos.forEach(item => {\n  const dataAgendamento = new Date(item.json.criado_em);\n  if (dataAgendamento >= hoje && dataAgendamento < new Date(hoje.getTime() + 86400000)) {\n    if (item.json.status === 'confirmado') {\n      stats.confirmados++;\n      stats.valor_confirmados += parseFloat(item.json.valor || 0);\n    } else if (item.json.status === 'cancelado') {\n      stats.cancelados++;\n      stats.valor_cancelados += parseFloat(item.json.valor || 0);\n    }\n  }\n});\n\nreturn {\n  json: {\n    data: hoje.toISOString().split('T')[0],\n    total_agendamentos: stats.confirmados + stats.cancelados,\n    confirmados: stats.confirmados,\n    cancelados: stats.cancelados,\n    receita_total: stats.valor_confirmados,\n    receita_cancelada: stats.valor_cancelados\n  }\n};"
       },
-      "id": "email-relatorio",
-      "name": "Email - Relatório Gerência",
-      "type": "n8n-nodes-base.emailSend",
+      "id": "code-processar-stats",
+      "name": "Code - Processar Estatísticas",
+      "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [650, 1600],
+      "position": [650, 1600]
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "folderId": {
+          "__rl": true,
+          "value": "RELATORIOS_FOLDER_ID",
+          "mode": "id"
+        },
+        "name": "=Relatorio_{{ $json.data }}.txt",
+        "fileContent": "=RELATÓRIO DIÁRIO - BARBEARIA PREMIUM\n\nData: {{ $json.data }}\n\n📊 ESTATÍSTICAS DO DIA:\n\nTotal de Agendamentos: {{ $json.total_agendamentos }}\n✅ Confirmados: {{ $json.confirmados }}\n❌ Cancelados: {{ $json.cancelados }}\n\n💰 RECEITA:\nReceita Total (Confirmados): R$ {{ $json.receita_total }}\nReceita Cancelada: R$ {{ $json.receita_cancelada }}\n\nGerado em: {{ $now.toISO() }}",
+        "mimeType": "text/plain",
+        "options": {}
+      },
+      "id": "drive-relatorio",
+      "name": "Google Drive - Salvar Relatório",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [850, 1550],
       "credentials": {
-        "smtp": {
+        "googleDriveOAuth2Api": {
           "id": "2",
-          "name": "SMTP Barbearia"
+          "name": "Google Drive - Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "service": "gmail",
+        "resource": "message",
+        "operation": "send",
+        "to": "gerencia@barbearia.com",
+        "subject": "=Relatório Diário - {{ $json.data }}",
+        "message": "=📊 *Relatório do Dia {{ $json.data }}*\n\nTotal de Agendamentos: {{ $json.total_agendamentos }}\n✅ Confirmados: {{ $json.confirmados }}\n❌ Cancelados: {{ $json.cancelados }}\n\n💰 Receita Total: R$ {{ $json.receita_total }}\n\nO relatório completo foi salvo no Google Drive.\n\nBarbearia Premium",
+        "options": {}
+      },
+      "id": "gmail-relatorio",
+      "name": "Gmail - Enviar Relatório",
+      "type": "n8n-nodes-base.google",
+      "typeVersion": 1,
+      "position": [850, 1650],
+      "credentials": {
+        "googleApi": {
+          "id": "3",
+          "name": "Google API - Barbearia"
         }
       }
     }
@@ -304,23 +497,23 @@
       "main": [
         [
           {
-            "node": "MongoDB - Salvar Agendamento",
+            "node": "Google Sheets - Salvar Agendamento",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "MongoDB - Salvar Agendamento": {
+    "Google Sheets - Salvar Agendamento": {
       "main": [
         [
           {
-            "node": "Email - Confirmação",
+            "node": "Google Drive - Salvar Confirmação",
             "type": "main",
             "index": 0
           },
           {
-            "node": "WhatsApp - Confirmação",
+            "node": "Gmail - Confirmação",
             "type": "main",
             "index": 0
           }
@@ -331,18 +524,29 @@
       "main": [
         [
           {
-            "node": "MongoDB - Buscar Agendamentos Amanhã",
+            "node": "Google Sheets - Buscar Agendamentos",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "MongoDB - Buscar Agendamentos Amanhã": {
+    "Google Sheets - Buscar Agendamentos": {
       "main": [
         [
           {
-            "node": "WhatsApp - Lembrete 24h",
+            "node": "Filtrar - Amanhã",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar - Amanhã": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Lembrete 24h",
             "type": "main",
             "index": 0
           }
@@ -353,18 +557,18 @@
       "main": [
         [
           {
-            "node": "MongoDB - Cancelar Agendamento",
+            "node": "Google Sheets - Cancelar Agendamento",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "MongoDB - Cancelar Agendamento": {
+    "Google Sheets - Cancelar Agendamento": {
       "main": [
         [
           {
-            "node": "WhatsApp - Notificação Cancelamento",
+            "node": "Gmail - Notificação Cancelamento",
             "type": "main",
             "index": 0
           }
@@ -375,29 +579,29 @@
       "main": [
         [
           {
-            "node": "MongoDB - Buscar Serviços Concluídos",
+            "node": "Google Sheets - Buscar Serviços Concluídos",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "MongoDB - Buscar Serviços Concluídos": {
+    "Google Sheets - Buscar Serviços Concluídos": {
       "main": [
         [
           {
-            "node": "WhatsApp - Solicitar Feedback",
+            "node": "Gmail - Solicitar Feedback",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "WhatsApp - Solicitar Feedback": {
+    "Gmail - Solicitar Feedback": {
       "main": [
         [
           {
-            "node": "MongoDB - Marcar Feedback Enviado",
+            "node": "Google Sheets - Marcar Feedback Enviado",
             "type": "main",
             "index": 0
           }
@@ -408,18 +612,34 @@
       "main": [
         [
           {
-            "node": "MongoDB - Gerar Relatório",
+            "node": "Google Sheets - Buscar Todos Agendamentos",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "MongoDB - Gerar Relatório": {
+    "Google Sheets - Buscar Todos Agendamentos": {
       "main": [
         [
           {
-            "node": "Email - Relatório Gerência",
+            "node": "Code - Processar Estatísticas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code - Processar Estatísticas": {
+      "main": [
+        [
+          {
+            "node": "Google Drive - Salvar Relatório",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Gmail - Enviar Relatório",
             "type": "main",
             "index": 0
           }
@@ -433,25 +653,25 @@
   "staticData": null,
   "tags": [
     {
-      "createdAt": "2026-02-03T12:00:00.000Z",
-      "updatedAt": "2026-02-03T12:00:00.000Z",
+      "createdAt": "2026-02-03T20:00:00.000Z",
+      "updatedAt": "2026-02-03T20:00:00.000Z",
       "id": "1",
       "name": "barbearia"
     },
     {
-      "createdAt": "2026-02-03T12:00:00.000Z",
-      "updatedAt": "2026-02-03T12:00:00.000Z",
+      "createdAt": "2026-02-03T20:00:00.000Z",
+      "updatedAt": "2026-02-03T20:00:00.000Z",
       "id": "2",
-      "name": "agendamento"
+      "name": "google-sheets"
     },
     {
-      "createdAt": "2026-02-03T12:00:00.000Z",
-      "updatedAt": "2026-02-03T12:00:00.000Z",
+      "createdAt": "2026-02-03T20:00:00.000Z",
+      "updatedAt": "2026-02-03T20:00:00.000Z",
       "id": "3",
-      "name": "automacao"
+      "name": "google-drive"
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-02-03T12:00:00.000Z",
-  "versionId": "1"
+  "updatedAt": "2026-02-03T20:00:00.000Z",
+  "versionId": "2"
 }

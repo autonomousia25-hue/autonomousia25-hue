@@ -1,40 +1,44 @@
-# 💈 Sistema Completo de Automação para Barbearia - n8n
+# 💈 Sistema Completo de Automação para Barbearia - n8n + Google Workspace
 
 ## 📋 Visão Geral
 
-Este workflow n8n foi projetado para automatizar completamente as operações de uma barbearia moderna, incluindo agendamento de clientes, notificações automáticas, lembretes, gestão de cancelamentos, coleta de feedback e relatórios gerenciais.
+Este workflow n8n foi projetado para automatizar completamente as operações de uma barbearia moderna usando **Google Sheets** como banco de dados e **Google Drive** para armazenamento de documentos. Inclui agendamento de clientes, notificações automáticas via Gmail, lembretes, gestão de cancelamentos, coleta de feedback e relatórios gerenciais.
 
 ## 🎯 Funcionalidades Principais
 
 ### 1. **Agendamento Automático** 📅
 - Recebe novos agendamentos via webhook
-- Salva dados no MongoDB
-- Envia confirmação por email e WhatsApp
+- Salva dados no **Google Sheets**
+- Cria documento de confirmação no **Google Drive**
+- Envia confirmação por **Gmail**
 - Armazena informações completas do cliente
 
 ### 2. **Sistema de Lembretes** 🔔
 - Lembrete automático 24h antes do agendamento
-- Envio via WhatsApp
+- Busca agendamentos no **Google Sheets**
+- Envio via **Gmail**
 - Verificação diária de agendamentos
 - Possibilidade de cancelamento/remarcação
 
 ### 3. **Gestão de Cancelamentos** ❌
 - Webhook para cancelamentos
-- Atualização automática no banco de dados
-- Notificação ao cliente via WhatsApp
+- Atualização automática no **Google Sheets**
+- Notificação ao cliente via **Gmail**
 - Registro do motivo do cancelamento
 
 ### 4. **Coleta de Feedback** ⭐
 - Solicitação automática após o serviço
-- Envio 1-2 horas após o horário agendado
+- Busca serviços concluídos no **Google Sheets**
+- Envio via **Gmail**
 - Controle para evitar múltiplos envios
 - Melhoria contínua do serviço
 
 ### 5. **Relatórios Gerenciais** 📊
 - Relatório diário automatizado
-- Estatísticas de agendamentos
+- Estatísticas de agendamentos do **Google Sheets**
 - Análise de receita
-- Envio por email para gerência
+- Salva relatório no **Google Drive**
+- Envio por **Gmail** para gerência
 
 ## 🏗️ Arquitetura do Workflow
 
@@ -43,69 +47,79 @@ Este workflow n8n foi projetado para automatizar completamente as operações de
 │                    FLUXO DE AGENDAMENTO                      │
 └─────────────────────────────────────────────────────────────┘
 
-Webhook             MongoDB              Notificações
-(Novo Agendamento) → (Salvar) → ┬→ Email (Confirmação)
-                                 └→ WhatsApp (Confirmação)
+Webhook             Google Sheets        Google Drive + Gmail
+(Novo Agendamento) → (Salvar Linha) → ┬→ Drive (Doc Confirmação)
+                                       └→ Gmail (Email Confirmação)
 
 ┌─────────────────────────────────────────────────────────────┐
 │                    FLUXO DE LEMBRETES                        │
 └─────────────────────────────────────────────────────────────┘
 
-Cron (Diário) → MongoDB → WhatsApp
-                (Buscar)  (Lembrete 24h)
+Cron (Diário) → Google Sheets → Gmail
+                (Buscar Linhas)  (Lembrete 24h)
 
 ┌─────────────────────────────────────────────────────────────┐
 │                   FLUXO DE CANCELAMENTO                      │
 └─────────────────────────────────────────────────────────────┘
 
-Webhook           MongoDB              Notificação
-(Cancelamento) → (Atualizar) → WhatsApp (Cancelamento)
+Webhook           Google Sheets         Notificação
+(Cancelamento) → (Atualizar Linha) → Gmail (Cancelamento)
 
 ┌─────────────────────────────────────────────────────────────┐
 │                    FLUXO DE FEEDBACK                         │
 └─────────────────────────────────────────────────────────────┘
 
-Cron (Horário) → MongoDB → WhatsApp → MongoDB
-                 (Buscar)  (Feedback)  (Marcar Enviado)
+Cron (Horário) → Google Sheets → Gmail → Google Sheets
+                 (Buscar Linhas) (Feedback) (Marcar Enviado)
 
 ┌─────────────────────────────────────────────────────────────┐
 │                   FLUXO DE RELATÓRIOS                        │
 └─────────────────────────────────────────────────────────────┘
 
-Webhook/Cron → MongoDB → Email
-               (Agregar) (Relatório)
+Webhook/Cron → Google Sheets → Code → ┬→ Google Drive (Salvar)
+               (Buscar Dados)   (Stats) └→ Gmail (Enviar)
 ```
 
-## 📦 Estrutura de Dados
+## 📦 Estrutura de Dados - Google Sheets
 
-### Coleção: `agendamentos`
+### Planilha: `Agendamentos`
 
-```json
-{
-  "cliente_nome": "João Silva",
-  "cliente_telefone": "+5511999999999",
-  "cliente_email": "joao@email.com",
-  "servico": "Corte + Barba",
-  "barbeiro": "Carlos",
-  "data_hora": "2026-02-05T14:00:00Z",
-  "status": "confirmado",
-  "valor": 50.00,
-  "observacoes": "Cliente prefere degradê",
-  "criado_em": "2026-02-03T12:00:00Z",
-  "feedback_enviado": false,
-  "cancelado_em": null,
-  "motivo_cancelamento": null
-}
+**Colunas:**
+- A: `criado_em` - Data/hora de criação (ISO 8601)
+- B: `cliente_nome` - Nome completo do cliente
+- C: `cliente_telefone` - Telefone (+5511999999999)
+- D: `cliente_email` - Email do cliente
+- E: `servico` - Nome do serviço
+- F: `barbeiro` - Nome do profissional
+- G: `data_hora` - Data/hora do agendamento
+- H: `status` - Status (confirmado/cancelado)
+- I: `valor` - Valor do serviço (número)
+- J: `observacoes` - Observações adicionais
+- K: `feedback_enviado` - Controle de feedback (true/false)
+
+
 ```
+| 2026-02-03T12:00:00Z | João Silva | +5511999999999 | joao@email.com | Corte + Barba | Carlos | 2026-02-05T14:00:00Z | confirmado | 50.00 | Cliente prefere degradê | false |
+```
+
+### Estrutura do Google Drive
+
+**Pasta: Confirmações**
+- Armazena documentos de confirmação de agendamento
+- Formato: `Confirmacao_[Nome]_[Data].txt`
+
+**Pasta: Relatórios**
+- Armazena relatórios diários
+- Formato: `Relatorio_[Data].txt`
 
 ## 🔧 Configuração e Instalação
 
 ### Pré-requisitos
 
 1. **n8n instalado** (self-hosted ou cloud)
-2. **MongoDB** (local ou cloud - MongoDB Atlas)
-3. **WhatsApp Business API** (Twilio, 360Dialog ou similar)
-4. **Servidor SMTP** para emails
+2. **Conta Google Workspace** ou Gmail
+3. **Google Sheets** com planilha criada
+4. **Google Drive** com pastas criadas
 
 ### Passo a Passo
 
@@ -116,34 +130,58 @@ Webhook/Cron → MongoDB → Email
 Workflows → Import from File → Selecione workflow-barbearia.json
 ```
 
-#### 2. Configurar Credenciais
+#### 2. Criar Google Sheets
 
-**MongoDB:**
-```
-Nome: MongoDB Barbearia
-Host: localhost:27017 (ou seu MongoDB Atlas)
-Database: barbearia
-```
+1. Acesse [Google Sheets](https://sheets.google.com)
+2. Crie uma nova planilha chamada "Barbearia - Agendamentos"
+3. Renomeie a primeira aba para "Agendamentos"
+4. Adicione o cabeçalho na primeira linha:
 
-**SMTP:**
 ```
-Nome: SMTP Barbearia
-Host: smtp.gmail.com
-Port: 587
-User: seu-email@gmail.com
-Password: sua-senha-de-app
+criado_em | cliente_nome | cliente_telefone | cliente_email | servico | barbeiro | data_hora | status | valor | observacoes | feedback_enviado
 ```
 
-**WhatsApp API:**
+5. Copie o ID da planilha da URL (exemplo: `1ABC...XYZ`)
+
+#### 3. Criar Pastas no Google Drive
+
+1. Acesse [Google Drive](https://drive.google.com)
+2. Crie duas pastas:
+   - `Barbearia - Confirmações`
+   - `Barbearia - Relatórios`
+3. Copie o ID de cada pasta da URL
+
+#### 4. Configurar Credenciais no n8n
+
+**Google Sheets OAuth2:**
 ```
-Nome: WhatsApp Business API
-Provider: Twilio/360Dialog
-Account SID: seu-account-sid
-Auth Token: seu-auth-token
-Phone Number: +5511999999999
+Nome: Google Sheets - Barbearia
+Tipo: OAuth2
+Scopes: https://www.googleapis.com/auth/spreadsheets
 ```
 
-#### 3. Configurar Webhooks
+**Google Drive OAuth2:**
+```
+Nome: Google Drive - Barbearia
+Tipo: OAuth2  
+Scopes: https://www.googleapis.com/auth/drive
+```
+
+**Google API (Gmail):**
+```
+Nome: Google API - Barbearia
+Tipo: Service Account ou OAuth2
+Scopes: https://www.googleapis.com/auth/gmail.send
+```
+
+#### 5. Atualizar IDs no Workflow
+
+No workflow JSON, substitua:
+- `SPREADSHEET_ID` pelo ID da sua planilha
+- `CONFIRMACOES_FOLDER_ID` pelo ID da pasta de confirmações
+- `RELATORIOS_FOLDER_ID` pelo ID da pasta de relatórios
+
+#### 6. Configurar Webhooks
 
 Os webhooks criados automaticamente terão URLs como:
 
