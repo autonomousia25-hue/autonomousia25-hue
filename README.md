@@ -178,7 +178,6 @@ code .
 **Produtividade:**
 - **Todo Tree** - Track TODO/FIXME
 - **Better Comments** - Improve code comments
-- **Bracket Pair Colorizer 2**
 - **Material Icon Theme** - File icons
 
 #### ⚙️ Configurações Recomendadas
@@ -195,7 +194,6 @@ Adicione ao seu `settings.json` (Cmd/Ctrl + Shift + P → "Open Settings JSON"):
   "typescript.updateImportsOnFileMove.enabled": "always",
   "javascript.updateImportsOnFileMove.enabled": "always",
   "git.autofetch": true,
-  "git.confirmSync": false,
   "files.autoSave": "onFocusChange",
   "workbench.iconTheme": "material-icon-theme",
   "terminal.integrated.defaultProfile.linux": "bash",
