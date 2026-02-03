@@ -56,6 +56,10 @@ extensions=(
     "esbenp.prettier-vscode"
     "eamodio.gitlens"
     "usernamehw.errorlens"
+    "ms-python.python"
+    "ms-python.vscode-pylance"
+    "ms-vscode-remote.remote-ssh"
+    "ms-vscode-remote.remote-containers"
     "gruntfuggly.todo-tree"
     "aaron-bond.better-comments"
     "pkief.material-icon-theme"
@@ -87,7 +91,7 @@ echo -e "${YELLOW}⏳ Abrindo VS Code em 3 segundos...${NC}"
 sleep 3
 
 # Abrir VS Code no diretório atual
-echo "Opening VS Code..."
+echo "Abrindo VS Code..."
 code .
 
 echo ""

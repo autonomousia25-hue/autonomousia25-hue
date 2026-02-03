@@ -51,6 +51,10 @@ $extensions = @(
     "esbenp.prettier-vscode",
     "eamodio.gitlens",
     "usernamehw.errorlens",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-vscode-remote.remote-ssh",
+    "ms-vscode-remote.remote-containers",
     "gruntfuggly.todo-tree",
     "aaron-bond.better-comments",
     "pkief.material-icon-theme"
