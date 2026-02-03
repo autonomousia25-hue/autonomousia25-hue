@@ -6,6 +6,72 @@ Bem-vindo ao meu perfil! Sou apaixonado por criar soluções inovadoras em **IA*
 
 ---
 
+## ⚡ Quick Start - Conexão Automática com GitHub Copilot
+
+**🎯 Configuração Automática em 1 Comando!**
+
+Este repositório está pré-configurado com GitHub Copilot e todas as extensões necessárias. Escolha uma das opções abaixo:
+
+### Opção 1: Script Automatizado (Recomendado) ⭐
+
+**Linux/Mac:**
+```bash
+git clone https://github.com/autonomousia25-hue/autonomousia25-hue.git
+cd autonomousia25-hue
+./setup-copilot.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+git clone https://github.com/autonomousia25-hue/autonomousia25-hue.git
+cd autonomousia25-hue
+.\setup-copilot.ps1
+```
+
+### Opção 2: Abrir Workspace (Automático)
+
+```bash
+git clone https://github.com/autonomousia25-hue/autonomousia25-hue.git
+cd autonomousia25-hue
+code autonomousia25-hue.code-workspace
+```
+
+VS Code irá automaticamente:
+- ✅ Sugerir instalação do GitHub Copilot
+- ✅ Instalar todas as extensões recomendadas
+- ✅ Aplicar configurações otimizadas
+- ✅ Abrir com Copilot já configurado
+
+### Opção 3: Dev Container (Cloud-Ready) ☁️
+
+1. Instale a extensão [Remote-Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+2. Clone o repositório
+3. Abra no VS Code
+4. Clique em "Reopen in Container"
+
+**Ou use GitHub Codespaces:**
+
+Clique no botão "Code" no GitHub → "Codespaces" → "Create codespace on main"
+
+### O que está incluído? 📦
+
+- ✅ **GitHub Copilot** + Chat pré-configurado
+- ✅ **ESLint** + **Prettier** para formatação automática
+- ✅ **GitLens** para histórico Git avançado
+- ✅ **Error Lens** para debugging inline
+- ✅ **Todo Tree** para gerenciar TODOs
+- ✅ **Material Icons** para melhor visualização
+- ✅ Configurações otimizadas de produtividade
+
+### Após a instalação:
+
+1. **Autenticação automática**: Notificação aparecerá no VS Code
+2. **Clique em "Sign In to GitHub"**
+3. **Autorize no navegador**
+4. **Pronto! 🎉** Comece a usar Copilot imediatamente
+
+---
+
 ## 💡 Sobre Mim
 
 - 🔧 Especialista em **automação com n8n**, **MCP servers** e **Agent Frameworks**
@@ -100,6 +166,314 @@ Bem-vindo ao meu perfil! Sou apaixonado por criar soluções inovadoras em **IA*
 - 📝 Guias práticos e tutoriais
 - 🔧 Templates e exemplos de código
 - 💡 Case studies e análises técnicas
+
+---
+
+## 💻 Acesse Meu VS Code
+
+Explore meus projetos diretamente no VS Code!
+
+[![Open in VS Code](https://img.shields.io/badge/Open%20in-VS%20Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)](https://vscode.dev/github/autonomousia25-hue/autonomousia25-hue)
+[![Open in GitHub Dev](https://img.shields.io/badge/Open%20in-GitHub.dev-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.dev/autonomousia25-hue/autonomousia25-hue)
+
+### 🚀 Acesso Rápido aos Projetos (Web)
+
+| Projeto | VS Code Web | GitHub Dev |
+|---------|-------------|------------|
+| **n8n MCP Server** | [![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/github/autonomousia25-hue/n8n-mcp-server) | [![GitHub](https://img.shields.io/badge/GitHub.dev-181717?style=flat-square&logo=github&logoColor=white)](https://github.dev/autonomousia25-hue/n8n-mcp-server) |
+| **Autonomousia25-hue** | [![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white)](https://vscode.dev/github/autonomousia25-hue/autonomousia25-hue) | [![GitHub](https://img.shields.io/badge/GitHub.dev-181717?style=flat-square&logo=github&logoColor=white)](https://github.dev/autonomousia25-hue/autonomousia25-hue) |
+
+### 🖥️ Configuração do VS Code Local
+
+#### 📋 Pré-requisitos
+
+1. **Instalar o VS Code**: [Download VS Code](https://code.visualstudio.com/download)
+2. **Instalar o Git**: [Download Git](https://git-scm.com/downloads)
+3. **Configurar SSH** (opcional, mas recomendado):
+   ```bash
+   # Gerar chave SSH
+   ssh-keygen -t ed25519 -C "seu-email@example.com"
+   
+   # Adicionar a chave ao ssh-agent
+   eval "$(ssh-agent -s)"
+   ssh-add ~/.ssh/id_ed25519
+   
+   # Copiar a chave pública e adicionar ao GitHub
+   cat ~/.ssh/id_ed25519.pub
+   ```
+
+#### 📦 Clonar Repositórios Localmente
+
+```bash
+# Clone via HTTPS
+git clone https://github.com/autonomousia25-hue/n8n-mcp-server.git
+cd n8n-mcp-server
+code .
+
+# Clone via SSH (recomendado)
+git clone git@github.com:autonomousia25-hue/n8n-mcp-server.git
+cd n8n-mcp-server
+code .
+```
+
+#### 🔌 Extensões Recomendadas do VS Code
+
+**Essenciais para Desenvolvimento:**
+- **ESLint** - Linting para JavaScript/TypeScript
+- **Prettier** - Formatação de código
+- **GitLens** - Supercharge Git capabilities
+- **GitHub Copilot** - AI pair programmer
+- **Error Lens** - Highlight errors inline
+
+**Para TypeScript/JavaScript:**
+- **TypeScript Vue Plugin (Volar)** - Vue 3 support
+- **JavaScript (ES6) code snippets**
+- **npm Intellisense**
+- **Path Intellisense**
+
+**Para Python:**
+- **Python** - Microsoft Python extension
+- **Pylance** - Fast Python language server
+- **Python Debugger**
+
+**DevOps & Docker:**
+- **Docker** - Manage containers
+- **Remote - SSH** - Edit files on remote servers
+- **Remote - Containers** - Develop inside containers
+
+**Produtividade:**
+- **Todo Tree** - Track TODO/FIXME
+- **Better Comments** - Improve code comments
+- **Material Icon Theme** - File icons
+
+#### 🤖 Configurar GitHub Copilot no VS Code Local
+
+O GitHub Copilot é um assistente de programação com IA que ajuda você a escrever código mais rápido e com mais qualidade.
+
+##### 📋 Pré-requisitos
+
+1. **Conta GitHub** com acesso ao GitHub Copilot
+   - ✅ [GitHub Copilot Individual](https://github.com/features/copilot) - Assinatura paga
+   - ✅ [GitHub Copilot for Students](https://education.github.com/pack) - Gratuito para estudantes verificados
+   - ✅ [GitHub Copilot Business](https://docs.github.com/copilot/overview-of-github-copilot/about-github-copilot-business) - Para organizações
+
+2. **VS Code** instalado (versão 1.74.0 ou superior)
+
+##### 🔧 Passo a Passo da Instalação
+
+**1. Instalar a Extensão GitHub Copilot**
+
+```bash
+# Opção 1: Via linha de comando
+code --install-extension GitHub.copilot
+
+# Opção 2: Via VS Code
+# 1. Abra VS Code
+# 2. Pressione Ctrl/Cmd + Shift + X para abrir Extensions
+# 3. Pesquise "GitHub Copilot"
+# 4. Clique em "Install"
+```
+
+**2. Autenticar com GitHub**
+
+Após instalar a extensão:
+
+1. Clique no ícone de notificação que aparece no canto inferior direito
+2. Ou vá em `Ctrl/Cmd + Shift + P` → Digite `"GitHub Copilot: Sign In"`
+3. VS Code abrirá seu navegador para autenticação
+4. Faça login com sua conta GitHub
+5. Autorize o GitHub Copilot
+6. Volte ao VS Code - você verá uma confirmação de sucesso
+
+**3. Verificar o Status do Copilot**
+
+- Verifique o ícone do GitHub Copilot na barra de status (canto inferior direito)
+- ✅ Ícone verde = Copilot ativo
+- ⚠️ Ícone com alerta = Problema de autenticação ou sem assinatura
+
+##### ⚙️ Configurações do Copilot
+
+Adicione ao seu `settings.json`:
+
+```json
+{
+  // Habilitar GitHub Copilot
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": true,
+    "plaintext": false,
+    "markdown": true
+  },
+  
+  // Sugestões inline automáticas
+  "github.copilot.inlineSuggest.enable": true,
+  
+  // Ativar/desativar por linguagem
+  "github.copilot.advanced": {
+    "listCount": 10,  // Número de sugestões alternativas
+    "inlineSuggestCount": 3
+  }
+}
+```
+
+##### 🚀 Como Usar o GitHub Copilot
+
+**Sugestões Inline:**
+- Digite código naturalmente - Copilot sugere automaticamente
+- `Tab` - Aceitar sugestão
+- `Esc` - Rejeitar sugestão
+- `Alt + ]` ou `Option + ]` - Próxima sugestão
+- `Alt + [` ou `Option + [` - Sugestão anterior
+
+**Copilot Chat (se disponível):**
+- `Ctrl/Cmd + I` - Abrir chat inline
+- `Ctrl/Cmd + Shift + I` - Abrir painel de chat
+- Digite perguntas ou peça para gerar código
+
+**Exemplos de Uso:**
+
+```javascript
+// Digite um comentário descrevendo o que precisa
+// função para validar email
+
+// Copilot vai sugerir:
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+```
+
+```python
+# calcular fibonacci recursivamente
+
+# Copilot vai sugerir:
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+```
+
+##### ⌨️ Atalhos Principais
+
+| Atalho | Função |
+|--------|--------|
+| `Tab` | Aceitar sugestão do Copilot |
+| `Esc` | Descartar sugestão |
+| `Alt/Option + ]` | Ver próxima sugestão |
+| `Alt/Option + [` | Ver sugestão anterior |
+| `Ctrl/Cmd + Enter` | Abrir painel com 10 sugestões |
+| `Ctrl/Cmd + I` | Abrir Copilot Chat inline |
+| `Ctrl/Cmd + Shift + I` | Abrir painel Copilot Chat |
+
+##### 🎯 Dicas para Melhores Resultados
+
+1. **Escreva Comentários Claros:**
+   ```javascript
+   // função que recebe array de números e retorna apenas os pares ordenados
+   ```
+
+2. **Use Nomes Descritivos:**
+   ```python
+   def calculate_monthly_payment(principal, annual_rate, years):
+       # Copilot entende melhor o contexto
+   ```
+
+3. **Forneça Contexto:**
+   - Mantenha arquivos relacionados abertos
+   - Use imports relevantes no topo do arquivo
+
+4. **Itere sobre Sugestões:**
+   - Use `Alt/Option + ]` para ver diferentes abordagens
+
+##### 🔍 Solução de Problemas
+
+**Copilot não está sugerindo código:**
+1. Verifique o ícone na barra de status - deve estar verde
+2. Verifique sua conexão com internet
+3. Confirme que sua assinatura está ativa em [GitHub Settings](https://github.com/settings/copilot)
+4. Tente fazer logout e login novamente: `Ctrl/Cmd + Shift + P` → `"GitHub Copilot: Sign Out"`
+
+**Sugestões de baixa qualidade:**
+1. Forneça mais contexto com comentários
+2. Mantenha arquivos relacionados abertos
+3. Use nomes de variáveis e funções mais descritivos
+
+**Copilot bloqueado por firewall corporativo:**
+1. Verifique se as URLs necessárias estão desbloqueadas:
+   - `https://github.com`
+   - `https://api.github.com`
+   - `https://copilot-proxy.githubusercontent.com`
+
+##### 📚 Recursos Adicionais
+
+- 📖 [Documentação Oficial GitHub Copilot](https://docs.github.com/copilot)
+- 🎓 [GitHub Copilot Quickstart](https://docs.github.com/copilot/quickstart)
+- 💡 [Melhores Práticas](https://github.blog/2023-06-20-how-to-write-better-prompts-for-github-copilot/)
+- 🔧 [Troubleshooting Guide](https://docs.github.com/copilot/troubleshooting-github-copilot)
+
+#### ⚙️ Configurações Recomendadas
+
+Adicione ao seu `settings.json` (Cmd/Ctrl + Shift + P → "Open Settings JSON"):
+
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "git.autofetch": true,
+  "files.autoSave": "onFocusChange",
+  "workbench.iconTheme": "material-icon-theme",
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "editor.suggestSelection": "first",
+  "editor.tabSize": 2,
+  "editor.bracketPairColorization.enabled": true
+}
+```
+
+#### 🌐 Desenvolvimento Remoto
+
+**Opção 1: Remote - SSH**
+```bash
+# Conectar a servidor remoto
+# Cmd/Ctrl + Shift + P → "Remote-SSH: Connect to Host"
+# Digite: user@hostname
+```
+
+**Opção 2: Dev Containers**
+```bash
+# Abrir projeto em container
+# Cmd/Ctrl + Shift + P → "Dev Containers: Reopen in Container"
+```
+
+**Opção 3: GitHub Codespaces**
+- Acesse o repositório no GitHub
+- Clique em "Code" → "Codespaces" → "Create codespace on main"
+
+#### 🚀 Atalhos Úteis do VS Code
+
+| Atalho | Ação |
+|--------|------|
+| `Ctrl/Cmd + P` | Quick Open (buscar arquivos) |
+| `Ctrl/Cmd + Shift + P` | Command Palette |
+| `Ctrl/Cmd + B` | Toggle Sidebar |
+| `Ctrl/Cmd + J` | Toggle Terminal |
+| `Ctrl/Cmd + Shift + F` | Search in files |
+| `Ctrl/Cmd + D` | Select next occurrence |
+| `Alt + ↑/↓` | Move line up/down |
+| `Ctrl/Cmd + /` | Toggle comment |
+| `F12` | Go to Definition |
+| `Shift + F12` | Show References |
+
+#### 📚 Recursos Adicionais
+
+- 📖 [VS Code Documentation](https://code.visualstudio.com/docs)
+- 🎓 [VS Code Tips & Tricks](https://code.visualstudio.com/docs/getstarted/tips-and-tricks)
+- 🔧 [VS Code Keyboard Shortcuts](https://code.visualstudio.com/docs/getstarted/keybindings)
+- 💡 [VS Code Extension Marketplace](https://marketplace.visualstudio.com/vscode)
 
 ---
 

@@ -1,0 +1,60 @@
+{
+  "name": "Autonomousia Development Environment",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  
+  // Configuração de features
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.12"
+    }
+  },
+
+  // Configurações do VS Code
+  "customizations": {
+    "vscode": {
+      // Extensões que serão instaladas automaticamente
+      "extensions": [
+        "github.copilot",
+        "github.copilot-chat",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "eamodio.gitlens",
+        "usernamehw.errorlens",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "gruntfuggly.todo-tree",
+        "aaron-bond.better-comments",
+        "pkief.material-icon-theme"
+      ],
+      
+      // Configurações que serão aplicadas
+      "settings": {
+        "github.copilot.enable": {
+          "*": true
+        },
+        "github.copilot.inlineSuggest.enable": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.tabSize": 2,
+        "editor.bracketPairColorization.enabled": true,
+        "git.autofetch": true,
+        "files.autoSave": "onFocusChange",
+        "workbench.iconTheme": "material-icon-theme"
+      }
+    }
+  },
+
+  // Comandos a serem executados após a criação do container
+  "postCreateCommand": "echo '✅ Dev Container configurado com GitHub Copilot!' && git config --global --add safe.directory ${containerWorkspaceFolder}",
+
+  // Portas a serem encaminhadas
+  "forwardPorts": [3000, 8000, 8080],
+
+  // Configurações do container
+  "remoteUser": "vscode"
+}
