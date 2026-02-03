@@ -180,6 +180,171 @@ code .
 - **Better Comments** - Improve code comments
 - **Material Icon Theme** - File icons
 
+#### 🤖 Configurar GitHub Copilot no VS Code Local
+
+O GitHub Copilot é um assistente de programação com IA que ajuda você a escrever código mais rápido e com mais qualidade.
+
+##### 📋 Pré-requisitos
+
+1. **Conta GitHub** com acesso ao GitHub Copilot
+   - ✅ [GitHub Copilot Individual](https://github.com/features/copilot) - Assinatura paga
+   - ✅ [GitHub Copilot for Students](https://education.github.com/pack) - Gratuito para estudantes verificados
+   - ✅ [GitHub Copilot Business](https://docs.github.com/copilot/overview-of-github-copilot/about-github-copilot-business) - Para organizações
+
+2. **VS Code** instalado (versão 1.74.0 ou superior)
+
+##### 🔧 Passo a Passo da Instalação
+
+**1. Instalar a Extensão GitHub Copilot**
+
+```bash
+# Opção 1: Via linha de comando
+code --install-extension GitHub.copilot
+
+# Opção 2: Via VS Code
+# 1. Abra VS Code
+# 2. Pressione Ctrl/Cmd + Shift + X para abrir Extensions
+# 3. Pesquise "GitHub Copilot"
+# 4. Clique em "Install"
+```
+
+**2. Autenticar com GitHub**
+
+Após instalar a extensão:
+
+1. Clique no ícone de notificação que aparece no canto inferior direito
+2. Ou vá em `Ctrl/Cmd + Shift + P` → Digite `"GitHub Copilot: Sign In"`
+3. VS Code abrirá seu navegador para autenticação
+4. Faça login com sua conta GitHub
+5. Autorize o GitHub Copilot
+6. Volte ao VS Code - você verá uma confirmação de sucesso
+
+**3. Verificar o Status do Copilot**
+
+- Verifique o ícone do GitHub Copilot na barra de status (canto inferior direito)
+- ✅ Ícone verde = Copilot ativo
+- ⚠️ Ícone com alerta = Problema de autenticação ou sem assinatura
+
+##### ⚙️ Configurações do Copilot
+
+Adicione ao seu `settings.json`:
+
+```json
+{
+  // Habilitar GitHub Copilot
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": true,
+    "plaintext": false,
+    "markdown": true
+  },
+  
+  // Sugestões inline automáticas
+  "github.copilot.inlineSuggest.enable": true,
+  
+  // Ativar/desativar por linguagem
+  "github.copilot.advanced": {
+    "listCount": 10,  // Número de sugestões alternativas
+    "inlineSuggestCount": 3
+  }
+}
+```
+
+##### 🚀 Como Usar o GitHub Copilot
+
+**Sugestões Inline:**
+- Digite código naturalmente - Copilot sugere automaticamente
+- `Tab` - Aceitar sugestão
+- `Esc` - Rejeitar sugestão
+- `Alt + ]` ou `Option + ]` - Próxima sugestão
+- `Alt + [` ou `Option + [` - Sugestão anterior
+
+**Copilot Chat (se disponível):**
+- `Ctrl/Cmd + I` - Abrir chat inline
+- `Ctrl/Cmd + Shift + I` - Abrir painel de chat
+- Digite perguntas ou peça para gerar código
+
+**Exemplos de Uso:**
+
+```javascript
+// Digite um comentário descrevendo o que precisa
+// função para validar email
+
+// Copilot vai sugerir:
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+```
+
+```python
+# calcular fibonacci recursivamente
+
+# Copilot vai sugerir:
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+```
+
+##### ⌨️ Atalhos Principais
+
+| Atalho | Função |
+|--------|--------|
+| `Tab` | Aceitar sugestão do Copilot |
+| `Esc` | Descartar sugestão |
+| `Alt/Option + ]` | Ver próxima sugestão |
+| `Alt/Option + [` | Ver sugestão anterior |
+| `Ctrl/Cmd + Enter` | Abrir painel com 10 sugestões |
+| `Ctrl/Cmd + I` | Abrir Copilot Chat inline |
+| `Ctrl/Cmd + Shift + I` | Abrir painel Copilot Chat |
+
+##### 🎯 Dicas para Melhores Resultados
+
+1. **Escreva Comentários Claros:**
+   ```javascript
+   // função que recebe array de números e retorna apenas os pares ordenados
+   ```
+
+2. **Use Nomes Descritivos:**
+   ```python
+   def calculate_monthly_payment(principal, annual_rate, years):
+       # Copilot entende melhor o contexto
+   ```
+
+3. **Forneça Contexto:**
+   - Mantenha arquivos relacionados abertos
+   - Use imports relevantes no topo do arquivo
+
+4. **Itere sobre Sugestões:**
+   - Use `Alt/Option + ]` para ver diferentes abordagens
+
+##### 🔍 Solução de Problemas
+
+**Copilot não está sugerindo código:**
+1. Verifique o ícone na barra de status - deve estar verde
+2. Verifique sua conexão com internet
+3. Confirme que sua assinatura está ativa em [GitHub Settings](https://github.com/settings/copilot)
+4. Tente fazer logout e login novamente: `Ctrl/Cmd + Shift + P` → `"GitHub Copilot: Sign Out"`
+
+**Sugestões de baixa qualidade:**
+1. Forneça mais contexto com comentários
+2. Mantenha arquivos relacionados abertos
+3. Use nomes de variáveis e funções mais descritivos
+
+**Copilot bloqueado por firewall corporativo:**
+1. Verifique se as URLs necessárias estão desbloqueadas:
+   - `https://github.com`
+   - `https://api.github.com`
+   - `https://copilot-proxy.githubusercontent.com`
+
+##### 📚 Recursos Adicionais
+
+- 📖 [Documentação Oficial GitHub Copilot](https://docs.github.com/copilot)
+- 🎓 [GitHub Copilot Quickstart](https://docs.github.com/copilot/quickstart)
+- 💡 [Melhores Práticas](https://github.blog/2023-06-20-how-to-write-better-prompts-for-github-copilot/)
+- 🔧 [Troubleshooting Guide](https://docs.github.com/copilot/troubleshooting-github-copilot)
+
 #### ⚙️ Configurações Recomendadas
 
 Adicione ao seu `settings.json` (Cmd/Ctrl + Shift + P → "Open Settings JSON"):
