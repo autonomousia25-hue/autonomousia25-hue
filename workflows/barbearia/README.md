@@ -2,28 +2,38 @@
 
 ## 📋 Visão Geral
 
-Este workflow n8n foi projetado para automatizar completamente as operações de uma barbearia moderna usando **Google Sheets** como banco de dados e **Google Drive** para armazenamento de documentos. Inclui agendamento de clientes, notificações automáticas via Gmail, lembretes, gestão de cancelamentos, coleta de feedback e relatórios gerenciais.
+Este workflow n8n foi projetado para automatizar completamente as operações de uma barbearia moderna usando o **Google Workspace**: 
+- **Google Sheets** como banco de dados
+- **Google Drive** para armazenamento de documentos  
+- **Google Calendar** para agendamento de horários
+- **Gmail** para comunicação com clientes
+
+Inclui agendamento de clientes, criação automática de eventos no calendário, notificações via Gmail, lembretes, gestão de cancelamentos, coleta de feedback e relatórios gerenciais.
 
 ## 🎯 Funcionalidades Principais
 
 ### 1. **Agendamento Automático** 📅
 - Recebe novos agendamentos via webhook
 - Salva dados no **Google Sheets**
+- Cria evento no **Google Calendar** automaticamente
+- Salva ID do evento no Sheets para referência
 - Cria documento de confirmação no **Google Drive**
 - Envia confirmação por **Gmail**
-- Armazena informações completas do cliente
+- Cliente recebe convite do Calendar por email
 
 ### 2. **Sistema de Lembretes** 🔔
 - Lembrete automático 24h antes do agendamento
 - Busca agendamentos no **Google Sheets**
 - Envio via **Gmail**
+- Google Calendar também envia lembretes configuráveis
 - Verificação diária de agendamentos
-- Possibilidade de cancelamento/remarcação
 
 ### 3. **Gestão de Cancelamentos** ❌
 - Webhook para cancelamentos
 - Atualização automática no **Google Sheets**
-- Notificação ao cliente via **Gmail**
+- Remove/cancela evento no **Google Calendar**
+- Notifica todos os participantes automaticamente
+- Envia notificação adicional via **Gmail**
 - Registro do motivo do cancelamento
 
 ### 4. **Coleta de Feedback** ⭐
@@ -47,9 +57,24 @@ Este workflow n8n foi projetado para automatizar completamente as operações de
 │                    FLUXO DE AGENDAMENTO                      │
 └─────────────────────────────────────────────────────────────┘
 
-Webhook             Google Sheets        Google Drive + Gmail
-(Novo Agendamento) → (Salvar Linha) → ┬→ Drive (Doc Confirmação)
-                                       └→ Gmail (Email Confirmação)
+Webhook → Google Sheets → Google Calendar → Atualizar Sheet → ┬→ Google Drive
+                           (Criar Evento)    (Event ID)        └→ Gmail
+
+┌─────────────────────────────────────────────────────────────┐
+│                    FLUXO DE LEMBRETES                        │
+└─────────────────────────────────────────────────────────────┘
+
+Cron (Diário) → Google Sheets → Filtro → Gmail
+                (Buscar Linhas)          (Lembrete 24h)
+                                        
+                Google Calendar também envia lembretes automáticos
+
+┌─────────────────────────────────────────────────────────────┐
+│                   FLUXO DE CANCELAMENTO                      │
+└─────────────────────────────────────────────────────────────┘
+
+Webhook → Google Sheets → Google Calendar → Gmail
+          (Atualizar)      (Cancelar Evento)  (Notificar)
 
 ┌─────────────────────────────────────────────────────────────┐
 │                    FLUXO DE LEMBRETES                        │
@@ -96,7 +121,23 @@ Webhook/Cron → Google Sheets → Code → ┬→ Google Drive (Salvar)
 - I: `valor` - Valor do serviço (número)
 - J: `observacoes` - Observações adicionais
 - K: `feedback_enviado` - Controle de feedback (true/false)
+- L: `calendar_event_id` - ID do evento no Google Calendar
 
+**Exemplo de linha:**
+
+```
+| 2026-02-03T12:00:00Z | João Silva | +5511999999999 | joao@email.com | Corte + Barba | Carlos | 2026-02-05T14:00:00Z | confirmado | 50.00 | Cliente prefere degradê | false | abc123xyz |
+```
+
+### Google Calendar
+
+**Calendário: Barbearia Premium**
+- Cada agendamento cria um evento no calendário
+- Evento inclui: título, descrição, horário, localização
+- Cliente é adicionado como convidado
+- Lembretes automáticos configurados (24h por email, 30min por popup)
+- Cor do evento: Azul (#9)
+- Duração padrão: 1 hora
 
 ```
 | 2026-02-03T12:00:00Z | João Silva | +5511999999999 | joao@email.com | Corte + Barba | Carlos | 2026-02-05T14:00:00Z | confirmado | 50.00 | Cliente prefere degradê | false |
@@ -138,12 +179,22 @@ Workflows → Import from File → Selecione workflow-barbearia.json
 4. Adicione o cabeçalho na primeira linha:
 
 ```
-criado_em | cliente_nome | cliente_telefone | cliente_email | servico | barbeiro | data_hora | status | valor | observacoes | feedback_enviado
+criado_em | cliente_nome | cliente_telefone | cliente_email | servico | barbeiro | data_hora | status | valor | observacoes | feedback_enviado | calendar_event_id
 ```
 
 5. Copie o ID da planilha da URL (exemplo: `1ABC...XYZ`)
 
-#### 3. Criar Pastas no Google Drive
+#### 3. Criar Google Calendar
+
+1. Acesse [Google Calendar](https://calendar.google.com)
+2. Crie um novo calendário chamado "Barbearia - Agendamentos"
+3. Configure as permissões (adicione barbeiros se necessário)
+4. Copie o ID do calendário:
+   - Configurações → Configurações do calendário
+   - Role até "Integrar calendário"
+   - Copie o "ID do calendário" (exemplo: `abc123@group.calendar.google.com`)
+
+#### 4. Criar Pastas no Google Drive
 
 1. Acesse [Google Drive](https://drive.google.com)
 2. Crie duas pastas:
@@ -151,7 +202,7 @@ criado_em | cliente_nome | cliente_telefone | cliente_email | servico | barbeiro
    - `Barbearia - Relatórios`
 3. Copie o ID de cada pasta da URL
 
-#### 4. Configurar Credenciais no n8n
+#### 5. Configurar Credenciais no n8n
 
 **Google Sheets OAuth2:**
 ```
@@ -167,6 +218,13 @@ Tipo: OAuth2
 Scopes: https://www.googleapis.com/auth/drive
 ```
 
+**Google Calendar OAuth2:**
+```
+Nome: Google Calendar - Barbearia
+Tipo: OAuth2
+Scopes: https://www.googleapis.com/auth/calendar
+```
+
 **Google API (Gmail):**
 ```
 Nome: Google API - Barbearia
@@ -174,14 +232,15 @@ Tipo: Service Account ou OAuth2
 Scopes: https://www.googleapis.com/auth/gmail.send
 ```
 
-#### 5. Atualizar IDs no Workflow
+#### 6. Atualizar IDs no Workflow
 
 No workflow JSON, substitua:
 - `SPREADSHEET_ID` pelo ID da sua planilha
+- `CALENDAR_ID` pelo ID do seu calendário
 - `CONFIRMACOES_FOLDER_ID` pelo ID da pasta de confirmações
 - `RELATORIOS_FOLDER_ID` pelo ID da pasta de relatórios
 
-#### 6. Configurar Webhooks
+#### 7. Configurar Webhooks
 
 Os webhooks criados automaticamente terão URLs como:
 

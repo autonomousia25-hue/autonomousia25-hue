@@ -1,5 +1,5 @@
 {
-  "name": "Barbearia - Sistema Completo de Agendamento (Google Sheets)",
+  "name": "Barbearia - Sistema Completo (Google Workspace + Calendar)",
   "nodes": [
     {
       "parameters": {
@@ -40,7 +40,8 @@
             "status": "confirmado",
             "valor": "={{ $json.valor }}",
             "observacoes": "={{ $json.observacoes }}",
-            "feedback_enviado": "false"
+            "feedback_enviado": "false",
+            "calendar_event_id": ""
           }
         },
         "options": {}
@@ -50,6 +51,85 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4,
       "position": [450, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "1",
+          "name": "Google Sheets - Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "CALENDAR_ID",
+          "mode": "id"
+        },
+        "start": "={{ $json.data_hora }}",
+        "end": "={{ $now.parse($json.data_hora).plus(1, 'hour').toISO() }}",
+        "summary": "={{ $json.servico }} - {{ $json.nome }}",
+        "description": "=Cliente: {{ $json.nome }}\nTelefone: {{ $json.telefone }}\nEmail: {{ $json.email }}\nBarbeiro: {{ $json.barbeiro }}\nValor: R$ {{ $json.valor }}\nObservações: {{ $json.observacoes }}",
+        "location": "Barbearia Premium - Rua da Barbearia, 123",
+        "attendees": "={{ $json.email }}",
+        "sendUpdates": "all",
+        "options": {
+          "colorId": "9",
+          "reminders": {
+            "useDefault": false,
+            "overrides": [
+              {
+                "method": "email",
+                "minutes": 1440
+              },
+              {
+                "method": "popup",
+                "minutes": 30
+              }
+            ]
+          }
+        }
+      },
+      "id": "calendar-criar-evento",
+      "name": "Google Calendar - Criar Evento",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 2,
+      "position": [650, 300],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "4",
+          "name": "Google Calendar - Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Agendamentos",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "calendar_event_id": "={{ $json.id }}"
+          }
+        },
+        "options": {
+          "dataLocationOnSheet": "headerRow",
+          "keyRow": "={{ $('Google Sheets - Salvar Agendamento').item.json.row }}"
+        }
+      },
+      "id": "sheets-atualizar-event-id",
+      "name": "Google Sheets - Salvar Event ID",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [850, 300],
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "1",
@@ -253,6 +333,30 @@
     },
     {
       "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "CALENDAR_ID",
+          "mode": "id"
+        },
+        "eventId": "={{ $json.calendar_event_id }}",
+        "sendUpdates": "all",
+        "options": {}
+      },
+      "id": "calendar-cancelar-evento",
+      "name": "Google Calendar - Cancelar Evento",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 2,
+      "position": [650, 1000],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "4",
+          "name": "Google Calendar - Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
         "authentication": "serviceAccount",
         "service": "gmail",
         "resource": "message",
@@ -266,7 +370,7 @@
       "name": "Gmail - Notificação Cancelamento",
       "type": "n8n-nodes-base.google",
       "typeVersion": 1,
-      "position": [650, 1000],
+      "position": [850, 1000],
       "credentials": {
         "googleApi": {
           "id": "3",
@@ -508,6 +612,28 @@
       "main": [
         [
           {
+            "node": "Google Calendar - Criar Evento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar - Criar Evento": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Salvar Event ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Salvar Event ID": {
+      "main": [
+        [
+          {
             "node": "Google Drive - Salvar Confirmação",
             "type": "main",
             "index": 0
@@ -565,6 +691,17 @@
       ]
     },
     "Google Sheets - Cancelar Agendamento": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar - Cancelar Evento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar - Cancelar Evento": {
       "main": [
         [
           {
