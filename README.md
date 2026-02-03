@@ -50,7 +50,8 @@ VS Code irá automaticamente:
 4. Clique em "Reopen in Container"
 
 **Ou use GitHub Codespaces:**
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=autonomousia25-hue/autonomousia25-hue)
+
+Clique no botão "Code" no GitHub → "Codespaces" → "Create codespace on main"
 
 ### O que está incluído? 📦
 

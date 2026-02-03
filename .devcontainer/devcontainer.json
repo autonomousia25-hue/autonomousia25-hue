@@ -55,11 +55,6 @@
   // Portas a serem encaminhadas
   "forwardPorts": [3000, 8000, 8080],
 
-  // Usar recursos do host
-  "mounts": [
-    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,readonly,type=bind,consistency=cached"
-  ],
-
   // Configurações do container
   "remoteUser": "vscode"
 }
