@@ -1,0 +1,457 @@
+{
+  "name": "Barbearia - Sistema Completo de Agendamento",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agendamento",
+        "options": {}
+      },
+      "id": "webhook-agendamento",
+      "name": "Webhook - Novo Agendamento",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "novo-agendamento"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "collection": "agendamentos",
+        "fields": "={\n  \"cliente_nome\": \"{{ $json.nome }}\",\n  \"cliente_telefone\": \"{{ $json.telefone }}\",\n  \"cliente_email\": \"{{ $json.email }}\",\n  \"servico\": \"{{ $json.servico }}\",\n  \"barbeiro\": \"{{ $json.barbeiro }}\",\n  \"data_hora\": \"{{ $json.data_hora }}\",\n  \"status\": \"confirmado\",\n  \"valor\": \"{{ $json.valor }}\",\n  \"observacoes\": \"{{ $json.observacoes }}\",\n  \"criado_em\": \"{{ $now }}\"\n}"
+      },
+      "id": "mongodb-salvar",
+      "name": "MongoDB - Salvar Agendamento",
+      "type": "n8n-nodes-base.mongodb",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "credentials": {
+        "mongoDb": {
+          "id": "1",
+          "name": "MongoDB Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "to": "={{ $json.cliente_email }}",
+        "subject": "Agendamento Confirmado - Barbearia Premium",
+        "text": "=Olá {{ $json.cliente_nome }},\n\nSeu agendamento foi confirmado com sucesso!\n\n📅 Data e Hora: {{ $json.data_hora }}\n✂️ Serviço: {{ $json.servico }}\n💈 Barbeiro: {{ $json.barbeiro }}\n💰 Valor: R$ {{ $json.valor }}\n\nObservações: {{ $json.observacoes }}\n\nEstamos te esperando!\n\nBarbearia Premium\n📞 (11) 99999-9999\n📍 Rua da Barbearia, 123",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "email-confirmacao",
+      "name": "Email - Confirmação",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [650, 200],
+      "credentials": {
+        "smtp": {
+          "id": "2",
+          "name": "SMTP Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumber": "={{ $json.cliente_telefone }}",
+        "message": "=🔔 *Agendamento Confirmado!*\n\nOlá *{{ $json.cliente_nome }}*!\n\n📅 Data: {{ $json.data_hora }}\n✂️ Serviço: {{ $json.servico }}\n💈 Barbeiro: {{ $json.barbeiro }}\n💰 Valor: R$ {{ $json.valor }}\n\nNos vemos em breve! 👋\n\n_Barbearia Premium_",
+        "options": {}
+      },
+      "id": "whatsapp-confirmacao",
+      "name": "WhatsApp - Confirmação",
+      "type": "n8n-nodes-base.whatsapp",
+      "typeVersion": 1,
+      "position": [650, 400],
+      "credentials": {
+        "whatsappApi": {
+          "id": "3",
+          "name": "WhatsApp Business API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 24
+            }
+          ]
+        }
+      },
+      "id": "cron-lembretes",
+      "name": "Cron - Verificar Lembretes Diários",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [250, 700]
+    },
+    {
+      "parameters": {
+        "operation": "find",
+        "collection": "agendamentos",
+        "query": "={\n  \"data_hora\": {\n    \"$gte\": \"{{ $now.plus(1, 'day').startOf('day') }}\",\n    \"$lte\": \"{{ $now.plus(1, 'day').endOf('day') }}\"\n  },\n  \"status\": \"confirmado\"\n}"
+      },
+      "id": "mongodb-buscar-amanha",
+      "name": "MongoDB - Buscar Agendamentos Amanhã",
+      "type": "n8n-nodes-base.mongodb",
+      "typeVersion": 1,
+      "position": [450, 700],
+      "credentials": {
+        "mongoDb": {
+          "id": "1",
+          "name": "MongoDB Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumber": "={{ $json.cliente_telefone }}",
+        "message": "=🔔 *Lembrete de Agendamento*\n\nOlá *{{ $json.cliente_nome }}*!\n\nLembramos que você tem um horário marcado *amanhã*:\n\n⏰ Horário: {{ $json.data_hora }}\n✂️ Serviço: {{ $json.servico }}\n💈 Barbeiro: {{ $json.barbeiro }}\n\nCaso precise cancelar ou remarcar, entre em contato conosco.\n\nAté amanhã! 🙌\n\n_Barbearia Premium_\n📞 (11) 99999-9999",
+        "options": {}
+      },
+      "id": "whatsapp-lembrete",
+      "name": "WhatsApp - Lembrete 24h",
+      "type": "n8n-nodes-base.whatsapp",
+      "typeVersion": 1,
+      "position": [650, 700],
+      "credentials": {
+        "whatsappApi": {
+          "id": "3",
+          "name": "WhatsApp Business API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cancelamento",
+        "options": {}
+      },
+      "id": "webhook-cancelamento",
+      "name": "Webhook - Cancelamento",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 1000],
+      "webhookId": "cancelamento-agendamento"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "collection": "agendamentos",
+        "updateKey": "_id",
+        "fields": "={\n  \"status\": \"cancelado\",\n  \"cancelado_em\": \"{{ $now }}\",\n  \"motivo_cancelamento\": \"{{ $json.motivo }}\"\n}"
+      },
+      "id": "mongodb-cancelar",
+      "name": "MongoDB - Cancelar Agendamento",
+      "type": "n8n-nodes-base.mongodb",
+      "typeVersion": 1,
+      "position": [450, 1000],
+      "credentials": {
+        "mongoDb": {
+          "id": "1",
+          "name": "MongoDB Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumber": "={{ $json.cliente_telefone }}",
+        "message": "=❌ *Agendamento Cancelado*\n\nOlá *{{ $json.cliente_nome }}*,\n\nSeu agendamento foi cancelado:\n\n📅 Data/Hora: {{ $json.data_hora }}\n✂️ Serviço: {{ $json.servico }}\n\nMotivo: {{ $json.motivo_cancelamento }}\n\nPara novo agendamento, entre em contato conosco!\n\n_Barbearia Premium_\n📞 (11) 99999-9999",
+        "options": {}
+      },
+      "id": "whatsapp-cancelamento",
+      "name": "WhatsApp - Notificação Cancelamento",
+      "type": "n8n-nodes-base.whatsapp",
+      "typeVersion": 1,
+      "position": [650, 1000],
+      "credentials": {
+        "whatsappApi": {
+          "id": "3",
+          "name": "WhatsApp Business API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "cron-feedback",
+      "name": "Cron - Verificar Serviços Concluídos",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [250, 1300]
+    },
+    {
+      "parameters": {
+        "operation": "find",
+        "collection": "agendamentos",
+        "query": "={\n  \"data_hora\": {\n    \"$gte\": \"{{ $now.minus(2, 'hours') }}\",\n    \"$lte\": \"{{ $now }}\"\n  },\n  \"status\": \"confirmado\",\n  \"feedback_enviado\": { \"$ne\": true }\n}"
+      },
+      "id": "mongodb-buscar-concluidos",
+      "name": "MongoDB - Buscar Serviços Concluídos",
+      "type": "n8n-nodes-base.mongodb",
+      "typeVersion": 1,
+      "position": [450, 1300],
+      "credentials": {
+        "mongoDb": {
+          "id": "1",
+          "name": "MongoDB Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumber": "={{ $json.cliente_telefone }}",
+        "message": "=⭐ *Como foi sua experiência?*\n\nOlá *{{ $json.cliente_nome }}*!\n\nEsperamos que tenha gostado do seu corte com o barbeiro *{{ $json.barbeiro }}*!\n\nNos ajude avaliando nosso serviço:\n\n👍 Excelente\n😊 Bom\n😐 Regular\n👎 Ruim\n\nSua opinião é muito importante!\n\n_Barbearia Premium_",
+        "options": {}
+      },
+      "id": "whatsapp-feedback",
+      "name": "WhatsApp - Solicitar Feedback",
+      "type": "n8n-nodes-base.whatsapp",
+      "typeVersion": 1,
+      "position": [650, 1300],
+      "credentials": {
+        "whatsappApi": {
+          "id": "3",
+          "name": "WhatsApp Business API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "collection": "agendamentos",
+        "updateKey": "_id",
+        "fields": "={\n  \"feedback_enviado\": true,\n  \"feedback_enviado_em\": \"{{ $now }}\"\n}"
+      },
+      "id": "mongodb-marcar-feedback",
+      "name": "MongoDB - Marcar Feedback Enviado",
+      "type": "n8n-nodes-base.mongodb",
+      "typeVersion": 1,
+      "position": [850, 1300],
+      "credentials": {
+        "mongoDb": {
+          "id": "1",
+          "name": "MongoDB Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "relatorio-diario",
+        "options": {}
+      },
+      "id": "webhook-relatorio",
+      "name": "Webhook - Relatório Diário",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 1600],
+      "webhookId": "relatorio-diario"
+    },
+    {
+      "parameters": {
+        "operation": "aggregate",
+        "collection": "agendamentos",
+        "query": "=[\n  {\n    \"$match\": {\n      \"data_hora\": {\n        \"$gte\": \"{{ $now.startOf('day') }}\",\n        \"$lte\": \"{{ $now.endOf('day') }}\"\n      }\n    }\n  },\n  {\n    \"$group\": {\n      \"_id\": \"$status\",\n      \"total\": { \"$sum\": 1 },\n      \"valor_total\": { \"$sum\": \"$valor\" }\n    }\n  }\n]"
+      },
+      "id": "mongodb-relatorio",
+      "name": "MongoDB - Gerar Relatório",
+      "type": "n8n-nodes-base.mongodb",
+      "typeVersion": 1,
+      "position": [450, 1600],
+      "credentials": {
+        "mongoDb": {
+          "id": "1",
+          "name": "MongoDB Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "to": "gerencia@barbearia.com",
+        "subject": "Relatório Diário - Barbearia Premium",
+        "text": "=📊 *Relatório do Dia {{ $now.format('DD/MM/YYYY') }}*\n\n{{ $json.map(item => `\nStatus: ${item._id}\nTotal de Agendamentos: ${item.total}\nValor Total: R$ ${item.valor_total}`).join('\\n\\n') }}\n\n_Relatório automático gerado pelo sistema_",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "email-relatorio",
+      "name": "Email - Relatório Gerência",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [650, 1600],
+      "credentials": {
+        "smtp": {
+          "id": "2",
+          "name": "SMTP Barbearia"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook - Novo Agendamento": {
+      "main": [
+        [
+          {
+            "node": "MongoDB - Salvar Agendamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB - Salvar Agendamento": {
+      "main": [
+        [
+          {
+            "node": "Email - Confirmação",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "WhatsApp - Confirmação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cron - Verificar Lembretes Diários": {
+      "main": [
+        [
+          {
+            "node": "MongoDB - Buscar Agendamentos Amanhã",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB - Buscar Agendamentos Amanhã": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp - Lembrete 24h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - Cancelamento": {
+      "main": [
+        [
+          {
+            "node": "MongoDB - Cancelar Agendamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB - Cancelar Agendamento": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp - Notificação Cancelamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cron - Verificar Serviços Concluídos": {
+      "main": [
+        [
+          {
+            "node": "MongoDB - Buscar Serviços Concluídos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB - Buscar Serviços Concluídos": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp - Solicitar Feedback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp - Solicitar Feedback": {
+      "main": [
+        [
+          {
+            "node": "MongoDB - Marcar Feedback Enviado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - Relatório Diário": {
+      "main": [
+        [
+          {
+            "node": "MongoDB - Gerar Relatório",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB - Gerar Relatório": {
+      "main": [
+        [
+          {
+            "node": "Email - Relatório Gerência",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-02-03T12:00:00.000Z",
+      "updatedAt": "2026-02-03T12:00:00.000Z",
+      "id": "1",
+      "name": "barbearia"
+    },
+    {
+      "createdAt": "2026-02-03T12:00:00.000Z",
+      "updatedAt": "2026-02-03T12:00:00.000Z",
+      "id": "2",
+      "name": "agendamento"
+    },
+    {
+      "createdAt": "2026-02-03T12:00:00.000Z",
+      "updatedAt": "2026-02-03T12:00:00.000Z",
+      "id": "3",
+      "name": "automacao"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-02-03T12:00:00.000Z",
+  "versionId": "1"
+}
