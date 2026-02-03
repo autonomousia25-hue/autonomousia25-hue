@@ -1,0 +1,89 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    // GitHub Copilot - Configuração Principal
+    "github.copilot.enable": {
+      "*": true,
+      "yaml": true,
+      "plaintext": false,
+      "markdown": true,
+      "javascript": true,
+      "typescript": true,
+      "python": true
+    },
+    "github.copilot.inlineSuggest.enable": true,
+    "github.copilot.advanced": {
+      "listCount": 10,
+      "inlineSuggestCount": 3
+    },
+
+    // Editor
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2,
+    "editor.suggestSelection": "first",
+    "editor.bracketPairColorization.enabled": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+
+    // Git
+    "git.autofetch": true,
+    "git.enableSmartCommit": true,
+
+    // Files
+    "files.autoSave": "onFocusChange",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+
+    // TypeScript/JavaScript
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+
+    // Workbench
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorTheme": "Default Dark+"
+  },
+  "extensions": {
+    "recommendations": [
+      "github.copilot",
+      "github.copilot-chat",
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "eamodio.gitlens",
+      "usernamehw.errorlens",
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "gruntfuggly.todo-tree",
+      "aaron-bond.better-comments",
+      "pkief.material-icon-theme"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": []
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Setup GitHub Copilot",
+        "type": "shell",
+        "command": "bash setup-copilot.sh",
+        "windows": {
+          "command": "powershell -ExecutionPolicy Bypass -File setup-copilot.ps1"
+        },
+        "group": "none",
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        },
+        "problemMatcher": []
+      }
+    ]
+  }
+}

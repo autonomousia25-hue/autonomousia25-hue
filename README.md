@@ -6,6 +6,71 @@ Bem-vindo ao meu perfil! Sou apaixonado por criar soluções inovadoras em **IA*
 
 ---
 
+## ⚡ Quick Start - Conexão Automática com GitHub Copilot
+
+**🎯 Configuração Automática em 1 Comando!**
+
+Este repositório está pré-configurado com GitHub Copilot e todas as extensões necessárias. Escolha uma das opções abaixo:
+
+### Opção 1: Script Automatizado (Recomendado) ⭐
+
+**Linux/Mac:**
+```bash
+git clone https://github.com/autonomousia25-hue/autonomousia25-hue.git
+cd autonomousia25-hue
+./setup-copilot.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+git clone https://github.com/autonomousia25-hue/autonomousia25-hue.git
+cd autonomousia25-hue
+.\setup-copilot.ps1
+```
+
+### Opção 2: Abrir Workspace (Automático)
+
+```bash
+git clone https://github.com/autonomousia25-hue/autonomousia25-hue.git
+cd autonomousia25-hue
+code autonomousia25-hue.code-workspace
+```
+
+VS Code irá automaticamente:
+- ✅ Sugerir instalação do GitHub Copilot
+- ✅ Instalar todas as extensões recomendadas
+- ✅ Aplicar configurações otimizadas
+- ✅ Abrir com Copilot já configurado
+
+### Opção 3: Dev Container (Cloud-Ready) ☁️
+
+1. Instale a extensão [Remote-Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+2. Clone o repositório
+3. Abra no VS Code
+4. Clique em "Reopen in Container"
+
+**Ou use GitHub Codespaces:**
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=autonomousia25-hue/autonomousia25-hue)
+
+### O que está incluído? 📦
+
+- ✅ **GitHub Copilot** + Chat pré-configurado
+- ✅ **ESLint** + **Prettier** para formatação automática
+- ✅ **GitLens** para histórico Git avançado
+- ✅ **Error Lens** para debugging inline
+- ✅ **Todo Tree** para gerenciar TODOs
+- ✅ **Material Icons** para melhor visualização
+- ✅ Configurações otimizadas de produtividade
+
+### Após a instalação:
+
+1. **Autenticação automática**: Notificação aparecerá no VS Code
+2. **Clique em "Sign In to GitHub"**
+3. **Autorize no navegador**
+4. **Pronto! 🎉** Comece a usar Copilot imediatamente
+
+---
+
 ## 💡 Sobre Mim
 
 - 🔧 Especialista em **automação com n8n**, **MCP servers** e **Agent Frameworks**
