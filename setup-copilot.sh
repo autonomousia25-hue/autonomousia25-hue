@@ -83,7 +83,8 @@ echo -e "${YELLOW}⏳ Abrindo VS Code em 3 segundos...${NC}"
 sleep 3
 
 # Abrir VS Code no diretório atual
-code . &
+echo "Opening VS Code..."
+code .
 
 echo ""
 echo -e "${GREEN}✨ Configuração concluída!${NC}"
