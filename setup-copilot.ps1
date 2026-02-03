@@ -59,7 +59,9 @@ $extensions = @(
 foreach ($ext in $extensions) {
     Write-Host "  → Instalando $ext..." -ForegroundColor Gray
     code --install-extension $ext --force
-    if ($LASTEXITCODE -ne 0) {
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "    ✓ Instalado" -ForegroundColor Green
+    } else {
         Write-Host "  ⚠️  Não foi possível instalar $ext" -ForegroundColor Yellow
     }
 }
