@@ -1,23 +1,26 @@
-# 🌌 Antigravity Hub | Autonomous IA 2026
-
 <div align="center">
-  <img src="banner_antigravity_slim.png" width="100%" />
+  <img src="https://capsule-render.vercel.app/api?type=soft&color=auto&height=120&section=header&text=Antigravity%20Hub&fontSize=50" />
 </div>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Main_Hub-Antigravity-00BFFF?style=for-the-badge&logo=github&logoColor=white" />
+  <a href="https://autonomousai.com.br/">
+    <img src="https://img.shields.io/badge/Website-autonomousai.com.br-00BFFF?style=for-the-badge&logo=google-chrome&logoColor=white" />
+  </a>
   <img src="https://img.shields.io/badge/Specialist-Automation_%26_IA-blueviolet?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Status-Operating-00FF00?style=for-the-badge" />
+</p>
+
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=00BFFF&width=435&lines=Especialista+em+Automação;Inteligência+Artificial+Autônoma;Arquitetura+Antigravity" alt="Typing SVG" />
 </p>
 
 ### 🏛️ Governança e Arquitetura
 Nossa infraestrutura é organizada em **Camadas Estritas** para máxima escalabilidade:
 
-*   **[CORE]** Infraestrutura, Hubs e Configurações de Sistemas.
-*   **[N8N]** Workflows, Agentes de Automação e Orquestração.
-*   **[APP]** Soluções Web, Sistemas Preditivos e Plataformas de Cliente.
+*   **[CORE]** Infraestrutura e Hubs.
+*   **[N8N]** Workflows e Agentes.
+*   **[APP]** Sistemas e Web Apps.
 
-### 🛠️ Tech Stack & Ecosystem
+### 🛠️ Tech Stack
 <p align="center">
   <img src="https://skillicons.dev/icons?i=python,js,ts,docker,supabase,vercel,github,vscode,linux,windows" />
   <br>
@@ -26,8 +29,7 @@ Nossa infraestrutura é organizada em **Camadas Estritas** para máxima escalabi
 
 ### 📈 GitHub Stats
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=autonomousia25-hue&show_icons=true&theme=tokyonight" height="170" />
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=autonomousia25-hue&theme=tokyonight" height="170" />
+  <img src="https://github-readme-stats.vercel.app/api?username=autonomousia25-hue&show_icons=true&theme=tokyonight" height="160" />
 </p>
 
 ---
