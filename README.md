@@ -1,50 +1,34 @@
-<div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=header&text=Autonomous%20IA&fontSize=70&animation=fadeIn" width="100%" />
-</div>
-
-<h2 align="center">🚀 Libere tempo e escale com inteligência</h2>
+# 🌌 Antigravity Hub | Autonomous IA 2026
 
 <div align="center">
-  <p><i>Empresa de Tecnologia da Informação especializada em Agentes Autônomos, Automação de Processos e Chatbots Inteligentes.</i></p>
+  <img src="banner_antigravity.png" width="100%" />
 </div>
-
----
-
-### 🤖 O Que Fazemos?
-
-Nós transformamos operações manuais em fluxos autônomos e contínuos:
-- **Agentes de IA 24/7:** Atendimento ao cliente, triagem e suporte.
-- **Operações Financeiras:** Sistemas inteligentes para cobrança e negociação.
-- **Orquestração de Processos:** Automações complexas integrando CRMs, ERPs e APIs externas.
-- **Engenharia de Prompt & LLMs:** Hubs baseados no Model Context Protocol (MCP).
-
----
-
-### 🛠️ Nossa Stack Tecnológica
 
 <p align="center">
-  <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=python,ts,nodejs,react,supabase,github,docker,azure" />
-  </a>
+  <img src="https://img.shields.io/badge/Main_Hub-Antigravity-00BFFF?style=for-the-badge&logo=github&logoColor=white" />
+  <img src="https://img.shields.io/badge/Specialist-Automation_%26_IA-blueviolet?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Status-Operating-00FF00?style=for-the-badge" />
 </p>
+
+### 🏛️ Governança e Arquitetura
+Nossa infraestrutura é organizada em **Camadas Estritas** para máxima escalabilidade:
+
+*   **[CORE]** Infraestrutura, Hubs e Configurações de Sistemas.
+*   **[N8N]** Workflows, Agentes de Automação e Orquestração.
+*   **[APP]** Soluções Web, Sistemas Preditivos e Plataformas de Cliente.
+
+### 📈 GitHub Stats
 <p align="center">
-  <b>Automação & Orquestração:</b> n8n | MCP Servers | Microsoft Foundry
+  <img src="https://github-readme-stats.vercel.app/api?username=autonomousia25-hue&show_icons=true&theme=tokyonight" height="170" />
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=autonomousia25-hue&theme=tokyonight" height="170" />
+</p>
+
+### 🛠️ Tech Stack & Ecosystem
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=python,js,ts,n8n,docker,supabase,vercel,github,vscode,linux,windows" />
 </p>
 
 ---
-
-### 🗂️ Arquitetura Governamental
-
-Nossa infraestrutura é pautada por **Spec-Driven Development (SDD)**, controlada pelo nosso Hub de IA:
-
-*   🔒 **antigravity-hub-skills**: Nosso centro de comando e biblioteca de skills globais.
-*   ⚡ **n8n-mcp-server**: Servidores integrados para workflows avançados.
-*   💼 **baldez-advogados-site**: Soluções web e plataformas institucionais.
-
----
-
 <div align="center">
-  <a href="mailto:autonomous.ia25@gmail.com">
-    <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
-  </a>
+  <b>🚀 Elevando a automação ao próximo nível com Antigravity.</b>
 </div>
