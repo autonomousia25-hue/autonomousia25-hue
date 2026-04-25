@@ -1,16 +1,16 @@
 <div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=soft&color=auto&height=120&section=header&text=Antigravity%20Hub&fontSize=50" />
+  <img src="https://capsule-render.vercel.app/api?type=soft&color=000000&height=150&section=header&text=Autonomous%20IA&fontSize=50&desc=AIA&descSize=25&descAlignY=75&fontColor=FFFFFF" />
 </div>
 
 <p align="center">
   <a href="https://autonomousai.com.br/">
-    <img src="https://img.shields.io/badge/Website-autonomousai.com.br-00BFFF?style=for-the-badge&logo=google-chrome&logoColor=white" />
+    <img src="https://img.shields.io/badge/Website-autonomousai.com.br-000000?style=for-the-badge&logo=google-chrome&logoColor=white" />
   </a>
-  <img src="https://img.shields.io/badge/Specialist-Automation_%26_IA-blueviolet?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Specialist-Automation_%26_IA-000000?style=for-the-badge" />
 </p>
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=00BFFF&width=435&lines=Especialista+em+Automação;Inteligência+Artificial+Autônoma;Arquitetura+Antigravity" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=FFFFFF&width=500&lines=Especialista+em+Automação;Inteligência+Artificial+Autônoma;Arquitetura+Antigravity;Soluções+de+IA+para+Advocacia;Workflows+n8n+Avançados;Automação+de+Processos+com+Python;Agentes+Inteligentes+24/7;Engenharia+de+Prompt+e+RAG" alt="Typing SVG" />
 </p>
 
 ### 🏛️ Governança e Arquitetura
