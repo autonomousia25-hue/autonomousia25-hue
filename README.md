@@ -1,7 +1,7 @@
 # 🌌 Antigravity Hub | Autonomous IA 2026
 
 <div align="center">
-  <img src="banner_antigravity.png" width="100%" />
+  <img src="banner_antigravity_slim.png" width="100%" />
 </div>
 
 <p align="center">
@@ -17,15 +17,17 @@ Nossa infraestrutura é organizada em **Camadas Estritas** para máxima escalabi
 *   **[N8N]** Workflows, Agentes de Automação e Orquestração.
 *   **[APP]** Soluções Web, Sistemas Preditivos e Plataformas de Cliente.
 
+### 🛠️ Tech Stack & Ecosystem
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=python,js,ts,docker,supabase,vercel,github,vscode,linux,windows" />
+  <br>
+  <img src="https://img.shields.io/badge/n8n-FF6C37?style=for-the-badge&logo=n8n&logoColor=white" />
+</p>
+
 ### 📈 GitHub Stats
 <p align="center">
   <img src="https://github-readme-stats.vercel.app/api?username=autonomousia25-hue&show_icons=true&theme=tokyonight" height="170" />
   <img src="https://github-readme-streak-stats.herokuapp.com/?user=autonomousia25-hue&theme=tokyonight" height="170" />
-</p>
-
-### 🛠️ Tech Stack & Ecosystem
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=python,js,ts,n8n,docker,supabase,vercel,github,vscode,linux,windows" />
 </p>
 
 ---
