@@ -22,7 +22,8 @@ Nossa infraestrutura é organizada em **Camadas Estritas** para máxima escalabi
 
 ### 🛠️ Tech Stack
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=python,js,ts,docker,supabase,vercel,github,vscode,linux,windows,n8n" />
+  <img src="https://skillicons.dev/icons?i=python,js,ts,docker,supabase,vercel,github,vscode,linux,windows" />
+  <img src="https://img.shields.io/badge/n8n-EA4B71?style=for-the-badge&logo=n8n&logoColor=white" height="48" />
 </p>
 
 ### 📈 GitHub Stats
