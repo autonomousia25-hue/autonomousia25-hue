@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=FFFFFF&width=500&lines=Especialista+em+Automação;Inteligência+Artificial+Autônoma;Arquitetura+Antigravity;Soluções+de+IA+para+Advocacia;Workflows+n8n+Avançados;Automação+de+Processos+com+Python;Agentes+Inteligentes+24/7;Engenharia+de+Prompt+e+RAG" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=FFFFFF&width=435&center=true&vCenter=true&lines=Especialista+em+Automação;Inteligência+Artificial+Autônoma;Arquitetura+Antigravity;Soluções+de+IA+para+Advocacia;Workflows+n8n+Avançados;Automação+de+Processos+com+Python;Agentes+Inteligentes+24/7;Engenharia+de+Prompt+e+RAG" alt="Typing SVG" />
 </p>
 
 ### 🏛️ Governança e Arquitetura
@@ -22,9 +22,7 @@ Nossa infraestrutura é organizada em **Camadas Estritas** para máxima escalabi
 
 ### 🛠️ Tech Stack
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=python,js,ts,docker,supabase,vercel,github,vscode,linux,windows" />
-  <br>
-  <img src="https://img.shields.io/badge/n8n-FF6C37?style=for-the-badge&logo=n8n&logoColor=white" />
+  <img src="https://skillicons.dev/icons?i=python,js,ts,docker,supabase,vercel,github,vscode,linux,windows,n8n" />
 </p>
 
 ### 📈 GitHub Stats
